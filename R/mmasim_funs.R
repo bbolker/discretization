@@ -94,3 +94,16 @@ CI_est <- function(arr,method="") {
                       se_CIw=apply(CIwid,2,sd)/sqrt(n)))
 }
 
+## just get residuals
+res_est <- function(arr,method="") {
+    resids <- arr[,,"est"]-arr[,,"true"]
+    require(reshape2)
+    return(data.frame(method=method,melt(resids)))
+}
+
+## get rmse
+rmse_est <- function(arr,method="") {
+    resids <- arr[,,"est"]-arr[,,"true"]
+    return(data.frame(method=method,param=colnames(resids),
+                      rmse=sqrt(colSums(resids^2))))
+}

@@ -13,7 +13,6 @@ batchfun <- function(FUN,seedvec,fn) {
         return(invisible(arr))
     } else NULL
 }
-
     
 source("mmasim_funs.R")
 batchfun(function(s) fitfun(simfun(seed=s)),
