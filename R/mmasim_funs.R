@@ -19,6 +19,7 @@ simfun <- function(N=1000,
                    g=0.8,
                    pars=NULL,
                    pcor=0.3,
+                   cortype=c("compsym","unif"),
                    stddev=2,
                    seed=NULL) {
     require(MASS)
@@ -28,13 +29,23 @@ simfun <- function(N=1000,
     if (pcor==0) {
         m <- matrix(rnorm(N*n_true),N,n_true)
     } else {
-        S <- matrix(pcor,n_true,n_true)
-        diag(S) <- 1
+        if (cortype=="compsym") {
+            S <- matrix(pcor,n_true,n_true)
+            diag(S) <- 1
+        } else {  ## random cors
+            S <- matrix(1,n_true,n_true)
+            while(TRUE) {
+                S[upper.tri(S)] <- runif(n_true*(n_true-1)/2,
+                                         -pcor,pcor)
+                S <- matrix(Matrix::forceSymmetric(S),n_true,n_true)
+                if (all(eigen(S,only.values=TRUE)$values>0)) break
+            }
+        }
         m <- MASS::mvrnorm(N,mu=rep(0,n_true),Sigma=S)
     }
     if (n_true>99) warning("n_true>99; parameters may not be properly sorted")
     dimnames(m) <- list(NULL,sprintf("b%0.2d",1:n_true))
-    beta <- c(0,pars)
+    beta <- c(0,pars)  ## zero intercept
     mu <- cbind(1,m) %*% beta
     y <- rnorm(N,mu,sd=stddev)
     dd <- data.frame(y,m)

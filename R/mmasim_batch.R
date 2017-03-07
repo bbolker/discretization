@@ -1,6 +1,7 @@
 seedvec <- 101:300
 names(seedvec) <- seedvec
 
+library(plyr)
 simfile <- function(x) sprintf("../simdata/%s.rds",x)
 batchfun <- function(FUN,seedvec,fn) {
     if (!file.exists(simfile(fn))) {
@@ -15,6 +16,14 @@ batchfun <- function(FUN,seedvec,fn) {
 }
     
 source("mmasim_funs.R")
+
+## test
+if (FALSE) {
+    res <- laply(1:10,
+                 function(s) fitfun(simfun(seed=s),method="full"),
+                 .progress="text")
+}
+
 batchfun(function(s) fitfun(simfun(seed=s)),
          seedvec=101:300,
          fn="c_arr")
@@ -31,4 +40,9 @@ batchfun(function(s) fitfun(simfun(seed=s),method="full",n_full=20),
 batchfun(function(s) fitfun(simfun(seed=s,pcor=0),method="full"),
          seedvec=101:1000,
          fn="fzc_arr")
+
+batchfun(function(s) fitfun(simfun(seed=s,pcor=0,cortype="unif"),
+                            method="full"),
+         seedvec=101:1000,
+         fn="frc_arr")
 
