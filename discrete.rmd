@@ -12,7 +12,7 @@ bibliography: discrete.bib
 
 ### Abstract
 
-Information-theoretic and multi-model averaging statistical approaches are a suboptimal tool for pursuing a multifactorial approach in ecology (also known as the "method of multiple working hypotheses"). Conceptually, they encourage ecologists to consider the relative quality of a set of straw-man models. Technically, they represent a simple form of *shrinkage estimation* (a way to make accurate predictions from a model with more parameters than the data can be support, by "shrinking" parameter estimates toward zero), but may be superseded by more efficient shrinkage procedures. Finally, shrinkage estimation in general
+Information-theoretic (IT) and multi-model averaging (MMA) statistical approaches are suboptimal tools for pursuing a multifactorial approach (the "method of multiple working hypotheses") in ecology. (1) Conceptually, IT encourages ecologists to perform tests on sets of straw-man models. (2) MMA improves on IT model comparison; it represents a simple form of *shrinkage estimation* (a way to make accurate predictions from a model with many parameters, by "shrinking" parameter estimates toward zero). However, newer approaches to shrinkage estimation are faster and have more rigorous statistical underpinnings. (3) A major disadvantage of shrinkage methods is that confidence intervals are extremely difficult to derive. If researchers want accurate estimates of the strength of multiple competing ecological processes along with reliable confidence intervals, their best hope is to use full (maximal) statistical models after making principled, *a priori* decisions about which predictors to include.
 
 ----
 
