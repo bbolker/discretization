@@ -1,5 +1,8 @@
 # To do
 
+- add: Why are we not evaluating multiple competing hypotheses in ecology and evolution?
+Betini GS, Avgar T, Fryxell JM. R Soc Open Sci. 2017 Jan; 4(1):160756
+
 - **Clarify**
 
 - CrossValidated post on "no free lunch" principle for coverage of shrinkage estimators?
