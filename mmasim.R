@@ -1,11 +1,12 @@
-#' Exploring coverage of multi-model-averaged confidence intervals
-#' 
+#' ---
+#' title: "Exploring coverage of multi-model-averaged confidence intervals"
+#' ---
 
-#+ knitr_setup
+#+ knitr_setup,message=FALSE
 library(knitr)
 opts_chunk$set(echo=FALSE)
 
-#+ pkgs
+#+ pkgs,message=FALSE
 library(MASS)
 library(plyr)
 library(reshape2)
@@ -19,6 +20,8 @@ results <- setNames(lapply(sprintf("simdata/%s.rds",resfn),readRDS),
                     resfn)
 
 ##' residuals
+
+#+ residuals
 dd_res <- Map(res_est,results,resnames)
 dd_res <- do.call(rbind,dd_res)
 ggplot(dd_res,aes(x=param,y=value,colour=method))+
@@ -27,6 +30,8 @@ ggplot(dd_res,aes(x=param,y=value,colour=method))+
 ##' why is the last (smallest true value) variable less biased?
 
 ##' rmse
+
+#+ rmse
 dd_rmse <- Map(rmse_est,results,resnames)
 dd_rmse <- do.call(rbind,dd_rmse)
 ggplot(dd_rmse,aes(x=param,y=rmse,colour=method))+
@@ -36,6 +41,8 @@ ggplot(dd_rmse,aes(x=param,y=rmse,colour=method))+
 ##' or a bug?
 
 ##' coverage
+
+#+ coverage
 dd <- Map(cov_est,results,resnames)
 dd <- do.call(rbind,dd)
 ggplot(dd,aes(par,cover,ymin=cover-2*se,ymax=cover+2*se,col=method))+
@@ -44,6 +51,8 @@ ggplot(dd,aes(par,cover,ymin=cover-2*se,ymax=cover+2*se,col=method))+
     scale_colour_brewer(palette="Set1")
 
 ##' confidence interval widths
+
+#+ CI_wid
 dd_CI <- Map(CI_est,results,resnames)
 dd_CI <- do.call(rbind,dd_CI)
 ggplot(dd_CI,aes(x=true_CIw,colour=method))+

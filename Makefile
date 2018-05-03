@@ -1,8 +1,12 @@
 %.pdf: %.rmd
-	echo "library(rmarkdown); render(\"$*.rmd\")" | R --slave
+	echo "rmarkdown::render(\"$<\")" | R --slave
 
 %.html: %.rmd
-	echo "library(rmarkdown); render(\"$*.rmd\",output_format=\"html_document\")" | R --slave
+	echo "rmarkdown::render(\"$<\",output_format=\"html_document\")" | R --slave
 
+
+## assumes in spinnable format?
+%.html: %.R
+	echo "rmarkdown::render(\"$<\")" | R --slave
 
 
