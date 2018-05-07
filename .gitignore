@@ -33,3 +33,17 @@ vignettes/*.pdf
 *.utf8.md
 *.knit.md
 
+
+## content from makestuff
+.ignore
+local.mk
+./makestuff
+up.time
+commit.time
+commit.default
+dotdir/
+clonedir/
+.clean_dir
+*.hup
+*.oldfile
+*.olddiff
