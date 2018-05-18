@@ -10,7 +10,8 @@ mkpars <- function(n_true=20,g=0.8) {
     
 ##' @param n_true dimensionality of true model
 ##' @param g geometric decrease in effect size
-##' @param pcor correlation among parameters (compound-symmetric)
+##' @param pcor correlation among parameters
+##' @param cortype type of correlation (compound-symmetric by default)
 ##' @param stddev standard deviation of response
 ##' @param seed random-number seed
 ##' @param N sample size
@@ -53,8 +54,15 @@ simfun <- function(N=1000,
     return(dd)
 }
 
-fitfun <- function(data, n_full=10, subset=NULL,
-                   method=c("dredge","full")) {
+##' @param data
+##' @param n_full Number of parameters for maximal model
+	## JD thinks the default should be NULL => all 
+##' @param method dredge for multi-model averaging, full for just using the full (maximal) model
+##' @param subset Choose a subset of dredged models to average
+fitfun <- function(data, n_full=10, 
+                   method=c("dredge","full"),
+						 subset=NULL)
+{
     method <- match.arg(method)
     ## 1:(n_full+1); include n_full predictors, plus response (column 1)
     model0 <- lm(y~.,data=data[,1:(n_full+1)],na.action=na.fail)
@@ -105,7 +113,7 @@ CI_est <- function(arr,method="") {
                       se_CIw=apply(CIwid,2,sd)/sqrt(n)))
 }
 
-## just get residuals
+## Get difference between estimate and true parameters and melt into long form
 res_est <- function(arr,method="") {
     resids <- arr[,,"est"]-arr[,,"true"]
     require(reshape2)

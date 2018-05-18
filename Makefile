@@ -27,7 +27,7 @@ Ignore += $(ms)
 
 ## Content
 
-Sources += $(wildcard *.R)
+Sources += $(wildcard *.R R/*.R)
 mmasim.html: mmasim.R
 
 Sources += discrete.bib discrete.rmd
