@@ -19,3 +19,13 @@ Betini GS, Avgar T, Fryxell JM. R Soc Open Sci. 2017 Jan; 4(1):160756
 	- examples of people using and misusing discrete comparisons: Luttbeg et al., Ponciano and Taper model averaging, evidentiary stats, etc.
 	- examples of people taking discrete models seriously?
 	- thinking about *what* before thinking about *how*
+
+## Sims
+
+* Check the intercept is percolating correctly (there's a place where we do cbind(0, …) which is probably insufficiently principled
+
+* Embed sims in pipeline
+
+* Improve colors, add more shapes
+
+
