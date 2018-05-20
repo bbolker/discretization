@@ -29,7 +29,7 @@ RCMD = Rscript --vanilla
 ## Content
 
 Sources += $(wildcard *.R R/*.R)
-mmasim.html: mmasim.R simdata/c.rds simdata/f.rds simdata/f20.rds simdata/f20.rds simdata/fzc.rds simdata/frc.rds
+mmasim.html: mmasim.R simdata/c.rds simdata/f.rds simdata/f20.rds simdata/f20.rds simdata/fzc.rds simdata/fnc.rds ## simdata/frc.rds 
 
 ## params: n_true n_reps avg_method n_full pcor ctype
 simtest.rds: R/mmasim_batch.R
@@ -41,14 +41,17 @@ simdata/c.rds: R/mmasim_batch.R
 simdata/f.rds: R/mmasim_batch.R
 	$(RCMD) R/mmasim_batch.R f 20 300 full 10 0.3 compsym
 
+simdata/fnc.rds: R/mmasim_batch.R
+	$(RCMD) R/mmasim_batch.R fnc 20 300 full 10 -0.05 compsym
+
 simdata/f20.rds: R/mmasim_batch.R
 	$(RCMD) R/mmasim_batch.R f20 20 300 full 20 0.3 compsym
 
 simdata/fzc.rds: R/mmasim_batch.R
 	$(RCMD) R/mmasim_batch.R fzc 20 300 full 10 0.0 zero
 
-simdata/frc.rds: R/mmasim_batch.R
-	$(RCMD) R/mmasim_batch.R frc 20 300 full 10 0.0 unif
+## simdata/frc.rds: R/mmasim_batch.R
+##	$(RCMD) R/mmasim_batch.R frc 20 300 full 10 0.02 unif
 
 Sources += discrete.bib discrete.rmd
 discrete.pdf: discrete.rmd

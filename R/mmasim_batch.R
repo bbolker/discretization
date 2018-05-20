@@ -3,6 +3,7 @@ print(args)
 
 ## TESTING
 ## args <- c("test", "20", "10", "mma", "10", "0.3", "compsym")
+args <- c( "frc", "20", "300", "full", "10", "0.3", "unif")
 simfile <- sprintf("simdata/%s.rds",args[1])
 n_full <- as.numeric(args[2])
 n_rep <- as.numeric(args[3])

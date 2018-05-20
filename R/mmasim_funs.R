@@ -30,6 +30,7 @@ simfun <- function(seed=NULL,
                    pcor=0.3,
                    cortype=c("compsym","unif","zero"),
                    stddev=2) {
+    maxtries <- 1000
     require(MASS)
     if (!is.null(seed)) set.seed(seed)
 
@@ -42,12 +43,19 @@ simfun <- function(seed=NULL,
             diag(S) <- 1
         } else if (cortype=="unif") {  ## random cors
             S <- matrix(1,n_true,n_true)
-            while(TRUE) {
+            tries <- 0
+            while(tries<maxtries) {
+                ## FIXME: can't work in maxtries
+                ## try some other method of generating random corr matrices?
                 S[upper.tri(S)] <- runif(n_true*(n_true-1)/2,
-                                         -pcor,pcor)
+                                         -abs(pcor),abs(pcor))
                 S <- matrix(Matrix::forceSymmetric(S),n_true,n_true)
-                if (all(eigen(S,only.values=TRUE)$values>0)) break
+                mineig <- min(eigen(S,only.values=TRUE)$values)
+                cat(mineig,"\n")
+                if (mineig>0) break
+                tries <- tries+1
             }
+            if (tries==maxtries) stop("maxtries reached in unif cortype calc")
         }
         m <- MASS::mvrnorm(N,mu=rep(0,n_true),Sigma=S)
     }
@@ -94,11 +102,14 @@ fitfun <- function(data, n_full=10,
 
 ## coverage
 ## duplicate of sumfun?
-cov_est <- function(arr,method="") {
+cov_est <- function(arr) {
     covered <- arr[,,"lwr"]<arr[,,"true"] & arr[,,"true"]<arr[,,"upr"]
     cov_est <- colMeans(covered)
     n <- nrow(covered)
-    return(data.frame(method=method,par=colnames(covered),cover=cov_est,se=sqrt(cov_est*(1-cov_est)/n)))
+    return(data.frame(par=colnames(covered),
+                      cover=cov_est,
+                      se=sqrt(cov_est*(1-cov_est)/n),
+                      stringsAsFactors=FALSE))
 }
 
 ## tests
@@ -110,26 +121,28 @@ if (FALSE) {
 }
 
 ## 'true' CI
-CI_est <- function(arr,method="") {
+CI_est <- function(arr) {
     resids <- arr[,,"est"]-arr[,,"true"]
     trueCI <- 2*apply(abs(resids),2,quantile,0.95)
     CIwid <- arr[,,"upr"]-arr[,,"lwr"]
     n <- nrow(resids)
-    return(data.frame(method=method,par=colnames(resids),true_CIw=trueCI,
+    return(data.frame(par=colnames(resids),
+                      true_CIw=trueCI,
                       avg_CIw=colMeans(CIwid),
-                      se_CIw=apply(CIwid,2,sd)/sqrt(n)))
+                      se_CIw=apply(CIwid,2,sd)/sqrt(n),
+                      stringsAsFactors=FALSE))
 }
 
 ## Get difference between estimate and true parameters and melt into long form
-res_est <- function(arr,method="") {
+res_est <- function(arr) {
     resids <- arr[,,"est"]-arr[,,"true"]
-    require(reshape2)
-    return(data.frame(method=method,melt(resids)))
+    return(reshape2::melt(resids,as.is=TRUE))
 }
 
 ## get rmse
-rmse_est <- function(arr,method="") {
+rmse_est <- function(arr) {
     resids <- arr[,,"est"]-arr[,,"true"]
-    return(data.frame(method=method,param=colnames(resids),
-                      rmse=sqrt(colSums(resids^2))))
+    return(data.frame(param=colnames(resids),
+                      rmse=sqrt(colSums(resids^2)),
+                      stringsAsFactors=FALSE))
 }
