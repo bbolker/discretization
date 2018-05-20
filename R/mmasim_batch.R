@@ -1,21 +1,27 @@
-seedvec <- 101:300
-names(seedvec) <- seedvec
+args = commandArgs(trailingOnly=TRUE)
+print(args)
+
+## TESTING
+## args <- c("test", "20", "10", "mma", "10", "0.3", "compsym")
+simfile <- sprintf("simdata/%s.rds",args[1])
+n_full <- as.numeric(args[2])
+n_rep <- as.numeric(args[3])
+method <- args[4]
+n_full <- as.numeric(args[5])
+pcor <- as.numeric(args[6])
+ctype <- args[7]
 
 library(plyr)
-simfile <- function(x) sprintf("../simdata/%s.rds",x)
-batchfun <- function(FUN,seedvec,fn) {
-    if (!file.exists(simfile(fn))) {
-        arr <- laply(seedvec,
-                     FUN,
-                     .progress="text")
-        dimnames(arr)[[1]] <- seedvec
-        names(dimnames(arr))[1] <- "seed"
-        saveRDS(arr,simfile(fn))
-        return(invisible(arr))
-    } else NULL
+library(dplyr)
+
+batchfun <- function(FUN,seedvec) {
+    arr <- laply(seedvec, FUN, .progress="text")
+    dimnames(arr)[[1]] <- seedvec
+    names(dimnames(arr))[1] <- "seed"
+    return(arr)
 }
-    
-source("mmasim_funs.R")
+
+source("R/mmasim_funs.R")
 
 ## test
 if (FALSE) {
@@ -24,25 +30,14 @@ if (FALSE) {
                  .progress="text")
 }
 
-batchfun(function(s) fitfun(simfun(seed=s)),
-         seedvec=101:300,
-         fn="c_arr")
+fs <- function(s) {
+    simfun(s, pcor=pcor, cortype=ctype) %>%
+        fitfun(method=method, n_full=n_full)
+}
 
-## can afford to do longer runs for these, they're fast
-batchfun(function(s) fitfun(simfun(seed=s),method="full"),
-         seedvec=101:1000,
-         fn="f_arr")
+arr <- batchfun(fs, seedvec=seq(n_rep))
 
-batchfun(function(s) fitfun(simfun(seed=s),method="full",n_full=20),
-         seedvec=101:1000,
-         fn="f20_arr")
+saveRDS(arr, file=simfile)
 
-batchfun(function(s) fitfun(simfun(seed=s,pcor=0),method="full"),
-         seedvec=101:1000,
-         fn="fzc_arr")
 
-batchfun(function(s) fitfun(simfun(seed=s,pcor=0,cortype="unif"),
-                            method="full"),
-         seedvec=101:1000,
-         fn="frc_arr")
 

@@ -14,7 +14,7 @@ library(ggplot2); theme_set(theme_bw())
 source("R/mmasim_funs.R")
 
 #+ setup
-resfn <- c("c_arr","f_arr","f20_arr","fzc_arr")
+resfn <- c("c","f","f20","fzc")
 resnames <- c("mma","full10","full20","full10_zerocor")
 results <- setNames(lapply(sprintf("simdata/%s.rds",resfn),readRDS),
                     resfn)

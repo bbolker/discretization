@@ -1,9 +1,9 @@
 # To do
 
-- add: Why are we not evaluating multiple competing hypotheses in ecology and evolution?
-Betini GS, Avgar T, Fryxell JM. R Soc Open Sci. 2017 Jan; 4(1):160756
+- add: @betini_why_2017, *Why are we not evaluating multiple competing hypotheses in ecology and evolution?*
+- from @dormann_model_2018 :
 
-- **Clarify**
+> We also investigate the quality of the confidence intervals calculated for model‐averaged predictions, showing that they differ greatly in behaviour and seldom manage to achieve nominal coverage. Our overall recommendations stress the importance of non‐parametric methods such as cross‐validation for a reliable uncertainty quantification of model‐averaged predictions.
 
 - CrossValidated post on "no free lunch" principle for coverage of shrinkage estimators?
     - early results suggest no CI advantage for e.g. ridge regression
@@ -27,5 +27,6 @@ Betini GS, Avgar T, Fryxell JM. R Soc Open Sci. 2017 Jan; 4(1):160756
 * Embed sims in pipeline
 
 * Improve colors, add more shapes
+
 
 

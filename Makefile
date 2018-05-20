@@ -20,15 +20,35 @@ Makefile: $(ms)
 
 $(ms):
 	cd $(dir $(ms)) && git clone $(msrepo)/$(notdir $(ms)).git
- 
+
 Ignore += $(ms)
 
+RCMD = Rscript --vanilla
 ######################################################################
 
 ## Content
 
 Sources += $(wildcard *.R R/*.R)
-mmasim.html: mmasim.R
+mmasim.html: mmasim.R simdata/c.rds simdata/f.rds simdata/f20.rds simdata/f20.rds simdata/fzc.rds simdata/frc.rds
+
+## params: n_true n_reps avg_method n_full pcor ctype
+simtest.rds: R/mmasim_batch.R
+	$(RCMD) R/mmasim_batch.R test 20 10 mma 10 0.3 compsym 
+
+simdata/c.rds: R/mmasim_batch.R
+	$(RCMD) R/mmasim_batch.R c 20 300 mma 10 0.3 compsym
+
+simdata/f.rds: R/mmasim_batch.R
+	$(RCMD) R/mmasim_batch.R f 20 300 full 10 0.3 compsym
+
+simdata/f20.rds: R/mmasim_batch.R
+	$(RCMD) R/mmasim_batch.R f20 20 300 full 20 0.3 compsym
+
+simdata/fzc.rds: R/mmasim_batch.R
+	$(RCMD) R/mmasim_batch.R fzc 20 300 full 10 0.0 zero
+
+simdata/frc.rds: R/mmasim_batch.R
+	$(RCMD) R/mmasim_batch.R frc 20 300 full 10 0.0 unif
 
 Sources += discrete.bib discrete.rmd
 discrete.pdf: discrete.rmd

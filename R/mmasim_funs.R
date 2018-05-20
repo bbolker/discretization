@@ -4,6 +4,8 @@
 
 library(MASS)
 
+##' @param n_true number of parameters
+##' @param g geometric decay parameter
 mkpars <- function(n_true=20,g=0.8) {
     return(g^(0:(n_true-1)))
 }
@@ -11,29 +13,34 @@ mkpars <- function(n_true=20,g=0.8) {
 ##' @param n_true dimensionality of true model
 ##' @param g geometric decrease in effect size
 ##' @param pcor correlation among parameters
-##' @param cortype type of correlation (compound-symmetric by default)
+##' @param cortype type of correlation
+##' \itemize{
+##' \item "compsym": compound symmetric with correlation \code{pcor}
+##' \item "unif": uniform with range (-pcor,pcor)
+##' \item "zero": zero correlation
+##' }
 ##' @param stddev standard deviation of response
 ##' @param seed random-number seed
 ##' @param N sample size
-simfun <- function(N=1000,
+simfun <- function(seed=NULL,
+                   N=1000,
                    n_true=20,
                    g=0.8,
                    pars=NULL,
                    pcor=0.3,
-                   cortype=c("compsym","unif"),
-                   stddev=2,
-                   seed=NULL) {
+                   cortype=c("compsym","unif","zero"),
+                   stddev=2) {
     require(MASS)
     if (!is.null(seed)) set.seed(seed)
 
     if (is.null(pars)) pars <- mkpars(n_true,g)
-    if (pcor==0) {
+    if (pcor==0 || cortype=="zero") {
         m <- matrix(rnorm(N*n_true),N,n_true)
     } else {
         if (cortype=="compsym") {
             S <- matrix(pcor,n_true,n_true)
             diag(S) <- 1
-        } else {  ## random cors
+        } else if (cortype=="unif") {  ## random cors
             S <- matrix(1,n_true,n_true)
             while(TRUE) {
                 S[upper.tri(S)] <- runif(n_true*(n_true-1)/2,
@@ -46,8 +53,8 @@ simfun <- function(N=1000,
     }
     if (n_true>99) warning("n_true>99; parameters may not be properly sorted")
     dimnames(m) <- list(NULL,sprintf("b%0.2d",1:n_true))
-    beta <- c(0,pars)  ## zero intercept
-    mu <- cbind(1,m) %*% beta
+    beta <- pars  ## no intercept
+    mu <- m %*% beta
     y <- rnorm(N,mu,sd=stddev)
     dd <- data.frame(y,m)
     attr(dd,"true_pars") <- pars
@@ -60,26 +67,26 @@ simfun <- function(N=1000,
 ##' @param method dredge for multi-model averaging, full for just using the full (maximal) model
 ##' @param subset Choose a subset of dredged models to average
 fitfun <- function(data, n_full=10, 
-                   method=c("dredge","full"),
+                   method=c("mma","full"),
 						 subset=NULL)
 {
     method <- match.arg(method)
     ## 1:(n_full+1); include n_full predictors, plus response (column 1)
-    model0 <- lm(y~.,data=data[,1:(n_full+1)],na.action=na.fail)
-    if (method=="dredge") {
+    dd <- data[,1:(n_full+1)]
+    ## zero-intercept model
+    model0 <- lm(y~.-1,data=dd,na.action=na.fail)
+    if (method=="mma") {
         ## multi-model averaging
         require(MuMIn)
         dd <- suppressMessages(dredge(model0))
         if (!is.null(subset)) {
             mm <- model.avg(dd,subset=subset)  ## was: subset=delta<8
         } else  mm <- model.avg(dd)
-    } else {
+    } else if (method=="full") {
         ## just use the full model
         mm <- model0
     }
-    cc <- cbind(coef(mm),confint(mm),
-                ## zero intercept
-                c(0,attr(data,"true_pars")[1:n_full]))
+    cc <- cbind(coef(mm),confint(mm),attr(data,"true_pars")[1:n_full])
     dimnames(cc) <- list(param=rownames(cc),
                          val=c("est","lwr","upr","true"))
     return(cc)
