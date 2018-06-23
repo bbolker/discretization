@@ -1,0 +1,3 @@
+- replicate Burnham and Anderson sims?
+- elasticnet vs MMA timing?
+- 

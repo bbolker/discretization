@@ -1,0 +1,112 @@
+---
+title: "Don't use multimodel averaging to understand multifactorial systems"
+author: Ben Bolker
+date:  ? July 2018
+bibliography: discrete.bib
+csl: apa.csl
+output:
+  ioslides_presentation:
+     toc: true
+---
+<!-- 
+apa.csl is a slightly hacked version of APA 
+  (modified for "et al" after 2 authors in text)
+-->
+<!-- .refs is style for reference page (small text) -->
+<style>
+.refs {
+   font-size: 16px;
+}
+.sm_block {
+   font-size: 20px;
+}
+h2 { 
+ color: #3399ff;		
+}
+h3 { 
+ color: #3399ff;		
+}
+.title-slide {
+   background-color: #55bbff;
+}
+</style>
+<!--    content: url(https://i.creativecommons.org/l/by-sa/4.0/88x31.png)
+>
+<!-- Limit image width and height -->
+<style type="text/css">
+img {     
+  max-height: 560px;     
+  max-width: 500px; 
+}
+div#before-column p.forceBreak {
+	break-before: column;
+}
+
+div#after-column p.forceBreak {
+	break-after: column;
+}
+</style>
+
+```{r setup,echo=FALSE,message=FALSE}
+library("ggplot2"); theme_set(theme_classic())
+library("reshape2")
+library("ggExtra")
+library("MASS")
+library("knitr")
+opts_chunk$set(echo=FALSE,fig.width=4,fig.height=4,out.width=400)
+```
+
+## what is multimodel averaging (MMA)?
+
+- developed/promoted by @burnham_model_2002
+- typical approach:
+     - fit full model
+     - fit all/many nested (subset) models  
+	 (e.g. `MuMIn::dredge()`)
+	 - use AIC weights to compute averaged predictions
+	 - compute model-averaged confidence intervals
+	 - interpret model ranks, AIC weights
+- many ways to do it wrong, but I'm not worrying about that here [@cade_model_2015;@brewer_relative_2016;@galipaud_ecologists_2014]
+- a form of **shrinkage estimation**
+
+## what's wrong with MMA?
+
+three problems:
+
+- conceptual
+- computational
+- inferential
+
+## conceptual problem: discretization
+
+- information-theoretic (IT) approaches often framed as descendants of Chamberlin's *method of multiple working hypotheses* [@raup_method_1995;@elliott_revisiting_2007]
+- but IT focuses on differentiating **discrete** hypotheses/models
+- submodels ($\beta_i=0$ for some subset $i$ of parameters) are always straw men
+- in multifactorial systems, comparing the weight of evidence for discrete hypotheses is at best a preliminary step
+
+**TODO**: ternary diagram?
+
+## computational problem: efficiency
+
+- MMA is super-convenient
+- as long as you can fit models and compute AICs and predictions, you can MMA
+- but ... have to fit **lots** of models  
+($2^n$ for full dredge of $n$ predictor variables)
+- other shrinkage estimators are much more efficient
+    - lasso/ridge/elastic-net
+	- machine-learning approaches (e.g. random forest)
+	- Bayesian with informative/regularizing priors
+- these typically fit the model *once*  
+(although tuning the degree of regularization may be harder)
+- maybe we don't care; we have lots of computers
+
+## inferential problem: undercoverage
+
+-
+
+## conclusions
+
+- 
+
+## References {.refs}
+
