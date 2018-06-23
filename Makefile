@@ -65,11 +65,13 @@ Sources += README.md TODO.md
 ## Bolker rules
 
 %.pdf: %.rmd
-	echo "rmarkdown::render(\"$<\")" | R --slave
+	echo "rmarkdown::render(\"$<\",output_format=\"pdf_document\")" | R --slave
 
 %.html: %.rmd
 	echo "rmarkdown::render(\"$<\",output_format=\"html_document\")" | R --slave
 
+%.slides.html: %.rmd
+	echo "rmarkdown::render(\"$<\",output_format=\"ioslides_presentation\")" | R --slave
 
 ## assumes in spinnable format?
 %.html: %.R
