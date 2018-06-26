@@ -83,6 +83,12 @@ library("knitr")
 opts_chunk$set(echo=FALSE,fig.width=4,fig.height=4,out.width=400)
 ```
 
+## acknowledgements
+
+money: NSERC
+
+ideas: Jonathan Dushoff, Marm Kilpatrick, Brian McGill, Daniel Park, Daniel Turek
+
 ## what are multifactorial systems?
 
 - many processes contribute to pattern
@@ -105,7 +111,7 @@ This talk is mostly about *inferential* or *scientific* questions
 
 - typical approach
     - fit full model; dredge; compute AIC weights
-    - present table of models/$\Delta$AIC/weights
+    - present table of models with $\Delta$AIC & weights
     - compute model-averaged point estimates and CIs
 - **many** ways to do it wrong  
 e.g. @cade_model_2015; @brewer_relative_2016; @galipaud_ecologists_2014
@@ -154,7 +160,7 @@ lasso/ridge/etc.; random forest etc.; Bayesian + regularizing priors
 (may need to tune shrinkage)
 - we do have lots of computers ...
 
-<img src="pix/bitcoin2.png" width="380px">
+<img src="pix/bitcoin2.png" width="350px">
 
 ## inferential problem: undercoverage
 

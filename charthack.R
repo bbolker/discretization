@@ -13,7 +13,6 @@ gcolours <- matrix(c(0.9,0.2,0.05,
                        dimnames=list(c("red","blue","green","black"),
                          c("R","G","B")))
 
-gridsize <- c(1,20)
 getchartdat <- function(fn="chart.png",
                         refpt=c(1880,0),
                         gridsize,    ## distance between first two x- and y- grid lines
@@ -68,10 +67,11 @@ getchartdat <- function(fn="chart.png",
     dframe
   }
 
-d <- getchartdat("bitcoin.png",gridsize=c(20,1),
+d <- getchartdat("pix/bitcoin.png",gridsize=c(1,1),
                  colours=bcolours)
 date <- seq.Date(as.Date("2017-02-05"),as.Date("2018-06-30"),
                  length=nrow(d))
+d$y <- d$y/max(d$y)*70 ## rescale (not sure what went wrong)
 dd <- data.frame(date,y=d[["y"]])
 
 ## https://en.wikipedia.org/wiki/List_of_countries_by_electricity_consumption
@@ -85,7 +85,7 @@ etab <- (url
     %>% html_table()
 )
 etab2 <- (etab[[1]]
-    %>% setNames(c("rank","country/region","consumption","data_year","source",
+    %>% setNames(c("rank","country_region","consumption","data_year","source",
                    "pop","year","energy_percap",
                    "power_percap"))
     %>% mutate(consumption=cnum(consumption)/1e9, ## convert to TWh/year
@@ -93,26 +93,28 @@ etab2 <- (etab[[1]]
                pop=cnum(pop))
 )
 
-etab3 <- filter(etab2,100<consumption & consumption<max(dd$y))
+etab3 <- filter(etab2,consumption<75) %>%
+    arrange(consumption) %>%
+    select(country_region,consumption) %>%
+    mutate(cbin=ggplot2::cut_width(consumption,5)) %>%
+    group_by(cbin) %>%
+    mutate(ind=1:length(country_region)) %>%
+    filter(ind==last(ind))
 ##
 digi_url <- "https://digiconomist.net/bitcoin-energy-consumption"
 library(ggplot2)
-library(ggrepel)
 ggplot(dd, aes(date,y))+
     labs(x="Date",y="estimated TWh/year",
          caption=sprintf("%s\n%s",digi_url,url),
          title="Bitcoin energy consumption")+
     expand_limits(y=0)+
     theme_bw() +
-    geom_label_repel(data=etab3,aes(y=consumption,label=`country/region`),
+    geom_label(data=etab3,aes(y=consumption,label=country_region),
               x=sort(dd$date)[10],
-              hjust=0,size=4,
-              segment.color=NA)+
-    geom_line(colour="red",size=2)
+              size=4,hjust=0)+
+    geom_line(colour="red",size=2,alpha=0.5)
               
-ggsave("bitcoin2.png",width=4,height=7)
-
-
+ggsave("pix/bitcoin2.png",width=4,height=7)
 d <- getchartdat("chart.png",gridsize=c(20,2e-7),
                  key=c(blue="English country dance", red="contra dance",
                    green="swing dance"))
