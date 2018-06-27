@@ -1,4 +1,3 @@
 - replicate Burnham and Anderson sims?
 - elasticnet vs MMA timing?
-- acknowledgements
 - slide format/pausing

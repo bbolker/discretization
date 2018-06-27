@@ -117,7 +117,7 @@ This talk is mostly about *inferential* or *scientific* questions
 e.g. @cade_model_2015; @brewer_relative_2016; @galipaud_ecologists_2014
      - ... but let's not worry about that now
 
-## why use MMA? {.columns-2}
+## why use MMA? {.columns-2 .build}
 
 > - avoid omitting potentially important predictors
 > - avoid overfitting
@@ -148,7 +148,7 @@ three problems:
 
 <font size="4px">Estimated contribution of plague transmission modes in Eyam 1665</font>
 
-## computational problem: efficiency {.columns-2}
+## computational problem: efficiency {.columns-2 .build}
 
 \newcommand{\bigO}{{\mathcal{O}}}
 
@@ -162,7 +162,7 @@ lasso/ridge/etc.; random forest etc.; Bayesian + regularizing priors
 
 <img src="pix/bitcoin2.png" width="350px">
 
-## inferential problem: undercoverage
+## inferential problem: undercoverage {.build}
 
 - various methods for constructing MMA CIs [@burnham_model_2002;@fletcher2012model;@kabaila_model-averaged_2016]
 - MMA CIs are generally **too narrow**  
@@ -197,6 +197,8 @@ lasso/ridge/etc.; random forest etc.; Bayesian + regularizing priors
 [@crome_novel_1996]
 
 ##
+
+<font size="6px">http://github.com/bbolker/discretization</font>
 
 <div class="center">
 <img src="pix/changemymind.jpg" alt="change my mind!" width="600px">

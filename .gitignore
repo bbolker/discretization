@@ -26,6 +26,7 @@ vignettes/*.pdf
 
 # knitr and R markdown default cache directories
 /*_cache/
+/*_files/
 /cache/
 /figure/
 
