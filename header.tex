@@ -1,0 +1,13 @@
+\usepackage{multicol}
+\usepackage{graphicx}
+\usepackage{url}
+\DeclareGraphicsExtensions{.png,.pdf,.jpg,.mps}
+\newcommand{\cemph}[1]{{\color{red} #1}}
+% https://stackoverflow.com/questions/20847371/two-column-layouts-in-rstudio-presentations-slidify-pandoc
+\def\begincols{\begin{columns}[T]}
+\def\begincol{\begin{column}}
+\def\endcol{\end{column}}
+\def\endcols{\end{columns}}
+\def\twocols{\begin{multicols}{2}}
+\def\endtwocols{\end{multicols}}
+
