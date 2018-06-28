@@ -48,3 +48,11 @@ clonedir/
 *.hup
 *.oldfile
 *.olddiff
+
+*.aux
+*.log
+*.toc
+*.snm
+*.bbl
+*.nav
+*.out

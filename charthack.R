@@ -115,6 +115,7 @@ ggplot(dd, aes(date,y))+
     geom_line(colour="red",size=2,alpha=0.5)
               
 ggsave("pix/bitcoin2.png",width=4,height=7)
+ggsave("pix/bitcoin2.pdf",width=4,height=7)
 d <- getchartdat("chart.png",gridsize=c(20,2e-7),
                  key=c(blue="English country dance", red="contra dance",
                    green="swing dance"))

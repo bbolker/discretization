@@ -1,12 +1,19 @@
 ---
 title: "Don't use multimodel averaging to understand multifactorial systems"
-author: "Ben Bolker"
+output:
+  beamer_presentation:
+    slide_level: 2
+    keep_tex: true
+    includes:
+      in_header: ./header.tex
+      after_body: ./suffix.tex
+author: "Ben Bolker \\newline McMaster University"
 date: "3 July 2018"
 bibliography: discrete.bib
 csl: reflist2.csl
-output:
-  ioslides_presentation
 ---
+
+<!-- tex hacks required: remove empty frame at beginning; break line in title (Burnham ref; add \framebreak manually to refs (ugh) -->
 <!-- 
 apa.csl is a slightly hacked version of APA 
   (modified for "et al" after 2 authors in text)
@@ -100,14 +107,14 @@ rather than testing *whether* we can detect its impact
 </blockquote>
 -->
 - related:
-    - Chamberlin's <font color="red">method of multiple working hypotheses</font>  
+    - Chamberlin's \cemph{method of multiple working hypotheses}
 [@raup_method_1995]
-    - <font color="red">tapering effect sizes</font> [@burnham_model_2002]
+    - \cemph{tapering effect sizes} [@burnham_model_2002]
 
 This talk is mostly about *inferential* or *scientific* questions  
 (but also applies to prediction/management)
 
-## what is multimodel averaging  (MMA)?<br>[@burnham_model_2002]
+## what is multimodel averaging  (MMA)? \\newline [@burnham_model_2002]
 
 - typical approach
     - fit full model; dredge; compute AIC weights
@@ -119,15 +126,26 @@ e.g. @cade_model_2015; @brewer_relative_2016; @galipaud_ecologists_2014
 
 ## why use MMA? {.columns-2 .build}
 
-> - avoid omitting potentially important predictors
-> - avoid overfitting
-> - $\approx$ optimize bias-variance tradeoff
-> - avoid stepwise approaches & pairwise comparisons
-> - MMA is a **shrinkage estimator** [@dahlgren_alternative_2010]
+\begincols
+\begincol{0.5\textwidth}
 
-![](pix/330px-The_Three_Bears_-_Project_Gutenberg_eText_17034.jpg)
+- avoid omitting potentially important predictors
+- avoid overfitting
+- $\approx$ optimize bias-variance tradeoff
+- avoid stepwise approaches and pairwise comparisons
+- MMA is a **shrinkage estimator** [@dahlgren_alternative_2010]
 
-<font size="4px">Rackham 1837</font>
+\endcol
+\begincol{0.5\textwidth}
+
+\pause
+
+\includegraphics[width=\textwidth]{pix/330px-The_Three_Bears_-_Project_Gutenberg_eText_17034.jpg}
+
+\tiny Rackham 1837
+
+\endcol
+\endcols
 
 ## why *not* use MMA?
 
@@ -139,16 +157,30 @@ three problems:
 
 ## conceptual problem: discretization {.build .columns-2}
 
+\begincols
+
+\begincol{0.5\textwidth}
+
 - information-theoretic (IT) approaches often framed as descendants of Chamberlin [@elliott_revisiting_2007]
 - but IT focuses on differentiating **discrete** hypotheses/models
 - submodels are always straw men
 - ¿ does this actually cause problems ?
 
-<img src="pix/eyam_ternary.png" width="400px">
+\endcol
+\begincol{0.5\textwidth}
 
-<font size="4px">Estimated contribution of plague transmission modes in Eyam 1665</font>
+\pause
+\includegraphics[width=\textwidth]{pix/eyam_ternary.png}
+
+{\small Estimated contribution of plague transmission modes in Eyam 1665}
+
+\endcol
+\endcols
 
 ## computational problem: efficiency {.columns-2 .build}
+
+\begincols
+\begincol{0.5\textwidth}
 
 \newcommand{\bigO}{{\mathcal{O}}}
 
@@ -160,7 +192,15 @@ lasso/ridge/etc.; random forest etc.; Bayesian + regularizing priors
 (may need to tune shrinkage)
 - we do have lots of computers ...
 
-<img src="pix/bitcoin2.png" width="350px">
+\endcol
+\begincol{0.5\textwidth}
+
+\pause
+
+\includegraphics[width=0.75\textwidth]{pix/bitcoin2.pdf}
+
+\endcol
+\endcols
 
 ## inferential problem: undercoverage {.build}
 
@@ -170,10 +210,13 @@ lasso/ridge/etc.; random forest etc.; Bayesian + regularizing priors
 - general property of shrinkage estimators? e.g. ridge-regression CI width $\geq$ least-squares CI [@obenchain_classical_1977]
 - **no free lunch**; can we ever gain certainty by shrinkage?
 
-<div class="center">
-<img src="pix/dormann_coverage.png" width="600px">
-<font size="4px">@dormann_model_2018, Figure 5</font>
-</div>
+\pause
+
+\includegraphics[width=0.7\textwidth]{pix/dormann_coverage.png}
+
+@dormann_model_2018, Figure 5
+
+
 
 ## possible reactions
 
@@ -198,12 +241,18 @@ lasso/ridge/etc.; random forest etc.; Bayesian + regularizing priors
 
 ##
 
-<font size="6px">http://github.com/bbolker/discretization</font>
+\url{http://github.com/bbolker/discretization}
 
-<div class="center">
-<img src="pix/changemymind.jpg" alt="change my mind!" width="600px">
-<font size="4px">https://imgflip.com</font>
-</div>
+\begin{center}
+\includegraphics[width=0.75\textwidth]{pix/changemymind.jpg}
 
-## References {.refs .columns-2}
+{\small https://imgflip.com}
+
+\end{center}
+
+## References {.refs .columns-2 .allowframebreaks}
+
+\tiny
+
+
 

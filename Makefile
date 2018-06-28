@@ -73,6 +73,9 @@ Sources += README.md TODO.md
 %.slides.html: %.rmd
 	echo "rmarkdown::render(\"$<\",output_format=\"ioslides_presentation\")" | R --slave
 
+%.slides.pdf: %.rmd
+	echo "rmarkdown::render(\"$<\",output_format=\"beamer_presentation\")" | R --slave
+
 ## assumes in spinnable format?
 %.html: %.R
 	echo "rmarkdown::render(\"$<\")" | R --slave
