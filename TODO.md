@@ -36,3 +36,4 @@
 - toot Harrell's horn
 - maybe try out B&A sims
 - some discussion of p-value/CI results under sparsity, tapering???
+- correct anti-Galipaud ref is Giam and Olden 2015 MEE "Quantifying variable importance ..." also see more recent Galipaud et al paper ...
