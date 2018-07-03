@@ -29,4 +29,10 @@
 * Improve colors, add more shapes
 
 
+## ISEC notes/thoughts
 
+- say something/more about "what should we do then?"
+- clarify prediction/inference dichotomy if necessary
+- toot Harrell's horn
+- maybe try out B&A sims
+- some discussion of p-value/CI results under sparsity, tapering???
