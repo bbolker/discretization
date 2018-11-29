@@ -41,3 +41,17 @@
 
 notes from twitter on model expansion: https://onlinelibrary.wiley.com/doi/abs/10.1111/j.2044-8317.2011.02037.x (Gelman and Shalizi B J Math Stat Phil 2012); https://onlinelibrary.wiley.com/doi/abs/10.1002/jwmg.891 (Ver Hoef and Boveng J Wild Man ? 2015); from F Rodriguez-Sanchez @frod_san on twitter)
 
+
+From Cade 2015:
+
+"Given the availability of valid statistical procedures for obtaining
+shrinkage estimates, there is little reason to rely
+on AIC model-averaged regression coefficients to provide
+something similar to shrinkage estimates (Burnham
+and Anderson 2002, Lukacs et al. 2010, Giudice et al. 2012),
+especially given that these model-averaged estimates have no
+defined units in the presence of multicollinearity"
+
+@schomaker_when_2018
+@fletcher_model_2018
+@fletcher_model-averaged_2011
