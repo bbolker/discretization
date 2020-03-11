@@ -6,7 +6,8 @@ bibliography: discrete.bib
 csl: reflist2.csl
 output:
    beamer_presentation:
-      keep_tex: true
+     keep_tex: true
+     toc: FALSE
 header-includes:
   - \usepackage{multicol}
   - \usepackage{graphicx}
@@ -96,6 +97,11 @@ library("MASS")
 library("knitr")
 opts_chunk$set(echo=FALSE,fig.width=4,fig.height=4,out.width=400)
 ```
+
+## what do you do?
+
+- [poll](https://www.polleverywhere.com/multiple_choice_polls/8JW59IQWaWnipW6USbYW8)
+- text `BENBOLKER2272` to `22333` or go to https://pollev.com/benbolker2272
 
 ## acknowledgements
 
@@ -220,7 +226,7 @@ e.g. @cade_model_2015; @brewer_relative_2016; @galipaud_ecologists_2014
 - (much) more efficient than dredging+MMA
 - post-selection inference is really, really hard: strong assumptions [@zhao_defense_2017;lee_exact_2013;dezeure_high_2015]
 
-## what about AIC for variable importance?
+## what about AIC tables?
 
 \includegraphics[height=0.8\textheight]{pix/karelus.png}
 
