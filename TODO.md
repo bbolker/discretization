@@ -22,12 +22,10 @@
 
 ## Sims
 
-* Check the intercept is percolating correctly (there's a place where we do cbind(0, …) which is probably insufficiently principled
-
-* Embed sims in pipeline
-
-* Improve colors, add more shapes
-
+- Check the intercept is percolating correctly (there's a place where we do cbind(0, …) which is probably insufficiently principled
+- Embed sims in pipeline
+- Improve colors, add more shapes
+- 
 
 ## ISEC notes/thoughts
 

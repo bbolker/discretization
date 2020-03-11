@@ -17,7 +17,7 @@ library(plyr)
 library(dplyr)
 library(reshape2)
 library(ggplot2); theme_set(theme_bw())
-source("R/mmasim_funs.R")
+source("simfuns/mmasim_funs.R")
 
 #+ setup
 resfiles <- c(c="mma"

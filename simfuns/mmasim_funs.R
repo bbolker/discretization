@@ -5,13 +5,17 @@
 library(MASS)
 
 ##' @param n_true number of parameters
-##' @param g geometric decay parameter
-mkpars <- function(n_true=20,g=0.8) {
-    return(g^(0:(n_true-1)))
+##' @param g geometric decay parameter (0<g<1)
+##' @param rand_sign (logical) flip signs of parameters randomly?
+mkpars <- function(n_true=20,g=0.8,rand_sign=FALSE) {
+    p <- g^(0:(n_true-1))
+    if (rand_sign) {
+        p <- p*sample(c(-1,1),size=length(p),replace=TRUE)
+    }
+    return(p)
 }
-    
-##' @param n_true dimensionality of true model
-##' @param g geometric decrease in effect size
+
+##' @inheritParams mkpars
 ##' @param pcor correlation among parameters
 ##' @param cortype type of correlation
 ##' \itemize{
@@ -22,19 +26,19 @@ mkpars <- function(n_true=20,g=0.8) {
 ##' @param stddev standard deviation of response
 ##' @param seed random-number seed
 ##' @param N sample size
+##' @param ... extra arguments passed to \code{\link{mkpars}}
 simfun <- function(seed=NULL,
                    N=1000,
-                   n_true=20,
-                   g=0.8,
                    pars=NULL,
                    pcor=0.3,
                    cortype=c("compsym","unif","zero"),
-                   stddev=2) {
+                   stddev=2,
+                   ...) {
     maxtries <- 1000
     require(MASS)
     if (!is.null(seed)) set.seed(seed)
 
-    if (is.null(pars)) pars <- mkpars(n_true,g)
+    if (is.null(pars)) pars <- mkpars(...)
     if (pcor==0 || cortype=="zero") {
         m <- matrix(rnorm(N*n_true),N,n_true)
     } else {

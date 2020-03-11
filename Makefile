@@ -65,6 +65,7 @@ Sources += README.md TODO.md
 ## Bolker rules
 
 %.pdf: %.rmd
+	echo "forcing PDF"
 	echo "rmarkdown::render(\"$<\",output_format=\"pdf_document\")" | R --slave
 
 %.html: %.rmd
@@ -74,6 +75,7 @@ Sources += README.md TODO.md
 	echo "rmarkdown::render(\"$<\",output_format=\"ioslides_presentation\")" | R --slave
 
 %.slides.pdf: %.rmd
+	echo "forcing beamer"
 	echo "rmarkdown::render(\"$<\",output_format=\"beamer_presentation\")" | R --slave
 
 ## assumes in spinnable format?
@@ -86,3 +88,5 @@ Sources += README.md TODO.md
 -include $(ms)/visual.mk
 -include $(ms)/git.mk
 
+clean:
+	rm -f *.toc *.nav *.snm *.aux *.bbl *.blg *~
