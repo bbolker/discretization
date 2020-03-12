@@ -1,5 +1,5 @@
 ---
-title: "Bad statistical-ecological advice for multifactorial systems"
+title: "Overcoming bad statistical-ecological advice for multifactorial systems"
 author: "Ben Bolker"
 date: "11 March 2020"
 bibliography: discrete.bib
@@ -98,16 +98,17 @@ library("knitr")
 opts_chunk$set(echo=FALSE,fig.width=4,fig.height=4,out.width=400)
 ```
 
-## what do you do?
-
-- [poll](https://www.polleverywhere.com/multiple_choice_polls/8JW59IQWaWnipW6USbYW8)
-- text `BENBOLKER2272` to `22333` or go to https://pollev.com/benbolker2272
-
 ## acknowledgements
 
 money: NSERC
 
 ideas: Jonathan Dushoff, Marm Kilpatrick, Brian McGill, Daniel Park, Daniel Turek, Florian Hartig, Carsten Dormann ...
+
+## what do you do?
+
+- [poll](https://www.polleverywhere.com/multiple_choice_polls/8JW59IQWaWnipW6USbYW8)
+- text `BENBOLKER2272` to `22333` or go to https://pollev.com/benbolker2272
+
 
 ## what are multifactorial systems?
 
@@ -137,7 +138,12 @@ Chamberlin in @raup_method_1995
 \endcol
 \begincol{0.5\textwidth}
 
-![](pix/free_lunch.jpg)
+```{r free_lunch}
+if (file.exists("pix/free_lunch.jpg")) {
+  knitr::include_graphics("pix/free_lunch.jpg")
+}
+```
+
 
 \endcol
 \endcols
@@ -224,7 +230,7 @@ e.g. @cade_model_2015; @brewer_relative_2016; @galipaud_ecologists_2014
 - pulls all estimates toward zero, avoids overfitting
 - strength of shrinkage usually *chosen from the data* (!!)
 - (much) more efficient than dredging+MMA
-- post-selection inference is really, really hard: strong assumptions [@zhao_defense_2017;lee_exact_2013;dezeure_high_2015]
+- post-selection inference is really, really hard: strong assumptions [@zhao_defense_2017;@lee_exact_2013;@dezeure_high_2015]
 
 ## what about AIC tables?
 
@@ -252,7 +258,7 @@ Back to multifactorial systems. What are we trying to do?
 
 \begincol{0.5\textwidth}
 
-- IT approaches often framed as good for multiple hypotheses [@elliott_revisiting_2007;richards_model_2011]
+- IT approaches often framed as good for multiple hypotheses [@elliott_revisiting_2007;@richards_model_2011]
 - but IT focuses on differentiating **discrete** hypotheses/models
 - submodels are always straw men
 
@@ -290,10 +296,11 @@ Back to multifactorial systems. What are we trying to do?
 
 ## loose ends
 
-- is it OK to select on non-focal parts of the model?
-    - interaction
+- is it OK to select on non-focal aspects of the model? e.g.
+    - interactions
     - random effects in mixed models
 - Bayesian approaches
+- prediction vs. inference
 
 ## References {.refs .columns-2 .allowframebreaks}
 

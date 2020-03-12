@@ -89,4 +89,7 @@ Sources += README.md TODO.md
 -include $(ms)/git.mk
 
 clean:
-	rm -f *.toc *.nav *.snm *.aux *.bbl *.blg *~
+	rm -f *.toc *.nav *.snm *.aux *.bbl *.blg *~ *.vrb
+
+get_results:
+	rsync -azrv collywobbles.mcmaster.ca:~/Documents/projects/discretization/lowpowerregression/results* .
