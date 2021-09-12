@@ -1,0 +1,279 @@
+---
+title: "Avoiding premature discretization in a multifactorial world"
+output:
+  beamer_presentation:
+    slide_level: 2
+    keep_tex: true
+    includes:
+      in_header: ./header.tex
+      after_body: ./suffix.tex
+author: "Ben Bolker \\newline McMaster University"
+date: "17 September 2021"
+bibliography: discrete.bib
+csl: reflist2.csl
+---
+
+<!-- tex hacks required: remove empty frame at beginning; break line in title (Burnham ref; add \framebreak manually to refs (ugh) -->
+<!-- 
+apa.csl is a slightly hacked version of APA 
+  (modified for "et al" after 2 authors in text)
+  -->
+<!-- blockquote:
+  https://css-tricks.com/snippets/css/simple-and-nice-blockquote-styling/ -->
+<!-- center:
+    https://www.w3schools.com/howto/howto_css_image_center.asp -->
+<!-- .refs is style for reference page (small text) -->
+<style>
+.refs {
+font-size: 14px;
+}
+.sm_block {
+ font-size: 20px;
+}
+h2 { 
+ color: #3399ff;		
+}
+h3 { 
+ color: #3399ff;		
+}
+.title-slide {
+   background-color: #55bbff;
+   }
+blockquote {
+  background: #f9f9f9;
+  border-left: 10px solid #ccc;
+  margin: 1.5em 10px;
+  padding: 0.5em 10px;
+  quotes: "\201C""\201D"
+}
+blockquote:before {
+  color: #ccc;
+  content: open-quote;
+  font-size: 4em;
+  line-height: 0.1em;
+  margin-right: 0.25em;
+  vertical-align: -0.4em;
+}
+blockquote p {
+  display: inline;
+}
+.center {
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    width: 50%;
+}
+</style>
+<!--    content: url(https://i.creativecommons.org/l/by-sa/4.0/88x31.png)
+>
+<!-- Limit image width and height -->
+<style type="text/css">
+img {     
+  max-height: 560px;     
+  max-width: 700px; 
+}
+div#before-column p.forceBreak {
+	break-before: column;
+}
+
+div#after-column p.forceBreak {
+	break-after: column;
+}
+</style>
+
+```{r setup,echo=FALSE,message=FALSE}
+library("ggplot2"); theme_set(theme_classic())
+library("reshape2")
+library("ggExtra")
+library("MASS")
+library("knitr")
+opts_chunk$set(echo=FALSE,fig.width=4,fig.height=4,out.width=400)
+```
+
+## acknowledgements
+
+money: NSERC
+
+ideas: Jonathan Dushoff, Marm Kilpatrick, Brian McGill, Daniel Park, Daniel Turek
+
+## what is a multifactorial system?
+
+- many processes contribute to pattern
+- quantify *how* each process affects the system,  
+rather than testing *whether* we can detect its impact
+
+This talk is mostly about *inferential* or *scientific* questions
+
+## what questions is applied statistics/machine learning/etc. trying to answer?
+
+- **prediction**: what is the expected outcome in a specified scenario?
+- **inference**: what factors are affecting observed outcomes, and how much?
+   - (alternately: prediction/estimation of effects **with uncertainty bounds**)
+   
+## what is (premature) discretization? why do we care?
+
+- often consider *point hypotheses*, often as *counterfactual null hypotheses*  
+(e.g. "delta variant has the same $R_0$ as earlier variants"; "masks do not prevent COVID transmission")
+   - never (?) true in biology/psychology/economics/epidemiology ...
+- "strong inference" [@platt_strong_1964]: (binary, discrete) alternative hypotheses 
+- testing among *many* discrete hypotheses (e.g. @taper_evidential_2015)
+
+## the method of multiple working hypotheses
+
+- Chamberlin's \cemph{method of multiple working hypotheses}
+[@raup_method_1995]
+
+<blockquote>
+... the measure of participation of each [process] must be determined before a satisfactory elucidation can be reached. The full solution therefore involves not only a recognition of multiple participation but an estimate of the measure and mode of each participation ...
+</blockquote>
+
+## discretomania
+
+- null hypothesis testing as measure of \cemph{clarity} (OK: [@dushoff_i_2019])
+- "feature/variable selection" in machine learning/prediction (OK as a shortcut)
+- 
+
+## overfitting/underfitting {.columns-2 .build}
+
+\begincols
+\begincol{0.5\textwidth}
+
+- avoid omitting potentially important predictors
+- avoid overfitting
+- $\approx$ optimize bias-variance tradeoff
+- avoid stepwise approaches and pairwise comparisons
+- MMA is a **shrinkage estimator** [@dahlgren_alternative_2010]
+
+\endcol
+\begincol{0.5\textwidth}
+
+\pause
+
+\includegraphics[width=\textwidth]{pix/330px-The_Three_Bears_-_Project_Gutenberg_eText_17034.jpg}
+
+\tiny Rackham 1837
+
+\endcol
+\endcols
+
+
+## what is multimodel averaging  (MMA)? \\newline [@burnham_model_2002]
+
+- typical approach
+    - fit full model; dredge; compute AIC weights
+    - present table of models with $\Delta$AIC & weights
+    - compute model-averaged point estimates and CIs
+- **many** ways to do it wrong  
+e.g. @cade_model_2015; @brewer_relative_2016; @galipaud_ecologists_2014
+     - ... but let's not worry about that now
+
+
+## why *not* use MMA?
+
+three problems:
+
+- conceptual
+- computational
+- inferential
+
+## conceptual problem: discretization {.build .columns-2}
+
+\begincols
+
+\begincol{0.5\textwidth}
+
+- information-theoretic (IT) approaches often framed as descendants of Chamberlin [@elliott_revisiting_2007]
+- but IT focuses on differentiating **discrete** hypotheses/models
+- submodels are always straw men
+- ¿ does this actually cause problems ?
+
+\endcol
+\begincol{0.5\textwidth}
+
+\pause
+\includegraphics[width=\textwidth]{pix/eyam_ternary.png}
+
+{\small Estimated contribution of plague transmission modes in Eyam 1665}
+
+\endcol
+\endcols
+
+## computational problem: efficiency {.columns-2 .build}
+
+\begincols
+\begincol{0.5\textwidth}
+
+\newcommand{\bigO}{{\mathcal{O}}}
+
+- classic MMA requires fitting **lots** of models: $\bigO(2^K K^2 n)$
+- more efficient shrinkage estimators:  
+lasso/ridge/etc.; random forest etc.; Bayesian + regularizing priors
+- $\bigO(K^2 n)$ or $\bigO(K n \log(n))$  
+[@hardy_machine_2017; @louppe_understanding_2014]  
+(may need to tune shrinkage)
+- we do have lots of computers ...
+
+\endcol
+\begincol{0.5\textwidth}
+
+\pause
+
+\includegraphics[width=0.75\textwidth]{pix/bitcoin2.pdf}
+
+\endcol
+\endcols
+
+## inferential problem: undercoverage {.build}
+
+- various methods for constructing MMA CIs [@burnham_model_2002;@fletcher2012model;@kabaila_model-averaged_2016]
+- MMA CIs are generally **too narrow**  
+[@turek2013frequentist;@kabaila_model-averaged_2016;@dormann_model_2018] but cf. @burnham_model_2002
+- general property of shrinkage estimators? e.g. ridge-regression CI width $\geq$ least-squares CI [@obenchain_classical_1977]
+- **no free lunch**; can we ever gain certainty by shrinkage?
+
+\pause
+
+\includegraphics[width=0.7\textwidth]{pix/dormann_coverage.png}
+
+@dormann_model_2018, Figure 5
+
+
+
+## possible reactions
+
+- "MMA CIs only undercover a little bit"
+    - then they're not good CIs; increased certainty is an illusion
+- "I'm only interested in prediction"
+    - really?
+    - do you want reliable CIs on your predictions?
+- "MMA is the only shrinkage estimator available for my problem"
+    - let's work on this	
+	
+## conclusions: what should you do?
+
+- for **inference**:
+    - use the full model
+    - *a priori* model reduction [@harrell_regression_2001]
+- for **prediction**:
+    - beware CIs from shrinkage estimates
+    - help develop efficient, principled shrinkage estimation methods
+    - use non-neutral, informative Bayesian priors?  
+[@crome_novel_1996]
+
+##
+
+\url{http://github.com/bbolker/discretization}
+
+\begin{center}
+\includegraphics[width=0.75\textwidth]{pix/changemymind.jpg}
+
+{\small https://imgflip.com}
+
+\end{center}
+
+## References {.refs .columns-2 .allowframebreaks}
+
+\tiny
+
+
+
