@@ -56,3 +56,7 @@ clonedir/
 *.bbl
 *.nav
 *.out
+*~
+*.mk
+*.Rout
+makestuff/

@@ -1,5 +1,5 @@
 ---
-title: "Avoiding premature discretization in a multifactorial world"
+title: "Nothing is zero in a multifactorial world (and why it matters)"
 output:
   beamer_presentation:
     slide_level: 2
@@ -80,16 +80,15 @@ div#after-column p.forceBreak {
 	break-after: column;
 }
 </style>
-
-```{r setup,echo=FALSE,message=FALSE}
+```{r setup,echo=FALSE,message=FALSE, include=FALSE}
+library(tidyverse)
 library("ggplot2"); theme_set(theme_classic())
 library("reshape2")
 library("ggExtra")
 library("MASS")
 library("knitr")
-opts_chunk$set(echo=FALSE,fig.width=4,fig.height=4,out.width=400)
+opts_chunk$set(echo=FALSE,fig.width=4,fig.height=4, out.height="0.8 \\textheight")
 ```
-
 ## acknowledgements
 
 money: NSERC
@@ -104,23 +103,30 @@ rather than testing *whether* we can detect its impact
 
 This talk is mostly about *inferential* or *scientific* questions
 
-## what questions is applied statistics/machine learning/etc. trying to answer?
+## what are we trying to do?
 
-- **prediction**: what is the expected outcome in a specified scenario?
+- **prediction**: what do we expect in a specified scenario?
 - **inference**: what factors are affecting observed outcomes, and how much?
-   - (alternately: prediction/estimation of effects **with uncertainty bounds**)
+   - (or: prediction/estimation of effects \cemph{with appropriate uncertainty bounds})
    
-## what is (premature) discretization? why do we care?
+## why do we pretend some effects are zero?
 
-- often consider *point hypotheses*, often as *counterfactual null hypotheses*  
-(e.g. "delta variant has the same $R_0$ as earlier variants"; "masks do not prevent COVID transmission")
-   - never (?) true in biology/psychology/economics/epidemiology ...
-- "strong inference" [@platt_strong_1964]: (binary, discrete) alternative hypotheses 
-- testing among *many* discrete hypotheses (e.g. @taper_evidential_2015)
+we often consider \cemph{point hypotheses}, often as *counterfactual null hypotheses*
+   - e.g.: "the delta variant has the same $R_0$ as earlier variants"; "masks do not prevent COVID transmission"
+   - never\footnotemark true in biology/psychology/economics/epidemiology ...
+   
+more general we might want to test among \emph{discrete} hypotheses:
+
+- "strong inference" [@platt_strong_1964]:  
+(binary, discrete) alternative hypotheses 
+- testing among *many* discrete hypotheses  
+[@taper_evidential_2015]
+
+\footnote[1]{what, never?}
 
 ## the method of multiple working hypotheses
 
-- Chamberlin's \cemph{method of multiple working hypotheses}
+- Chamberlin's \emph{method of multiple working hypotheses}  
 [@raup_method_1995]
 
 <blockquote>
@@ -129,25 +135,60 @@ This talk is mostly about *inferential* or *scientific* questions
 
 ## discretomania
 
-- null hypothesis testing as measure of \cemph{clarity} (OK: [@dushoff_i_2019])
-- "feature/variable selection" in machine learning/prediction (OK as a shortcut)
-- 
+- null hypothesis testing as measure of \emph{clarity} (\bemph{OK} @dushoff_i_2019)
+- "feature/variable selection" in data science (\bemph{OK but maybe not optimal?})
+- stepwise regression (\cemph{not OK!})
+- model averaging (OK?)
+
+Why throw away information?
+
+<!-- animation?
+
+https://gist.github.com/mattblackwell/0d26d5c8f61f231570d61ccd62fe511f 
+https://www.mattblackwell.org/blog/2021/04/06/rmd-overlays/
+
+-->
+
+## overfitting (1)
+
+```{r overfit1}
+## http://www.mathworks.com/products/matlab/demos.html?
+##  file=/products/demos/shipping/matlab/census.html
+dd <- data.frame(time = seq(1900,2000,by=10),
+           pop = c(75.995,91.972,105.711,123.203,131.669,
+                   150.697,179.323,203.212,226.505,249.633,281.422)) %>%
+    mutate(sct=(time-1950)/50)
+predframe <- tibble(time=seq(1900,2020, length=101)) %>% mutate(sct=(time-1950)/50)
+orders = c(1:4,8)
+pred <- purrr::map_dfr(setNames(orders, orders),
+               ~ {
+                   m <- lm(pop ~ poly(sct, ., raw=TRUE), data=dd)
+                   data.frame(predframe,
+                              pop = predict(m, newdata=predframe))
+               },
+               .id = "order")
+ggplot(dd, aes(time, pop)) + geom_point(size=3) +
+    geom_line(data=pred, aes(colour=order)) +
+    coord_cartesian(ylim=c(0,350),
+                    xlim=c(1890, 2025), expand=FALSE) +
+    labs(x="year", y="US population (millions)")
+```
 
 ## overfitting/underfitting {.columns-2 .build}
 
 \begincols
 \begincol{0.5\textwidth}
 
-- avoid omitting potentially important predictors
-- avoid overfitting
-- $\approx$ optimize bias-variance tradeoff
-- avoid stepwise approaches and pairwise comparisons
-- MMA is a **shrinkage estimator** [@dahlgren_alternative_2010]
+- \onslide<1-> avoid omitting important predictors
+- \onslide<2-> avoid overfitting
+- \onslide<3-> $\approx$ optimize \cemph{bias-variance tradeoff}
+- \onslide<4-> any data-based approach to inclusion (stepwise etc.) runs afoul of the \emph{Texas sharpshooter fallacy}
 
 \endcol
 \begincol{0.5\textwidth}
 
-\pause
+\onslide<1->
+<!-- \pause -->
 
 \includegraphics[width=\textwidth]{pix/330px-The_Three_Bears_-_Project_Gutenberg_eText_17034.jpg}
 
@@ -156,9 +197,12 @@ This talk is mostly about *inferential* or *scientific* questions
 \endcol
 \endcols
 
+## no free lunches
 
-## what is multimodel averaging  (MMA)? \\newline [@burnham_model_2002]
+## multimodel averaging  (MMA) [@burnham_model_2002]
 
+- ``information-theoretic" approach (Kullback-Leibler distance)
+- 
 - typical approach
     - fit full model; dredge; compute AIC weights
     - present table of models with $\Delta$AIC & weights
@@ -166,7 +210,6 @@ This talk is mostly about *inferential* or *scientific* questions
 - **many** ways to do it wrong  
 e.g. @cade_model_2015; @brewer_relative_2016; @galipaud_ecologists_2014
      - ... but let's not worry about that now
-
 
 ## why *not* use MMA?
 
@@ -205,12 +248,7 @@ three problems:
 
 \newcommand{\bigO}{{\mathcal{O}}}
 
-- classic MMA requires fitting **lots** of models: $\bigO(2^K K^2 n)$
-- more efficient shrinkage estimators:  
-lasso/ridge/etc.; random forest etc.; Bayesian + regularizing priors
-- $\bigO(K^2 n)$ or $\bigO(K n \log(n))$  
-[@hardy_machine_2017; @louppe_understanding_2014]  
-(may need to tune shrinkage)
+- model average may mean fitting **lots** of models: $\bigO(2^K K^2 n)$
 - we do have lots of computers ...
 
 \endcol
@@ -218,7 +256,7 @@ lasso/ridge/etc.; random forest etc.; Bayesian + regularizing priors
 
 \pause
 
-\includegraphics[width=0.75\textwidth]{pix/bitcoin2.pdf}
+\includegraphics[width=0.75\textwidth]{pix/bitcoin_nyc.png}
 
 \endcol
 \endcols
@@ -237,11 +275,17 @@ lasso/ridge/etc.; random forest etc.; Bayesian + regularizing priors
 
 @dormann_model_2018, Figure 5
 
+## solutions: shrinkage estimators
 
+- lasso/ridge/etc.; random forest etc.; Bayesian + regularizing priors
+- $\bigO(K^2 n)$ or $\bigO(K n \log(n))$ (compare $\bigO(2^K K^2 n)$)
+[@hardy_machine_2017; @louppe_understanding_2014]  
+- may need to tune shrinkage by cross-validation
+- but ...
 
 ## possible reactions
 
-- "MMA CIs only undercover a little bit"
+- "CIs only undercover a little bit"
     - then they're not good CIs; increased certainty is an illusion
 - "I'm only interested in prediction"
     - really?
@@ -259,17 +303,6 @@ lasso/ridge/etc.; random forest etc.; Bayesian + regularizing priors
     - help develop efficient, principled shrinkage estimation methods
     - use non-neutral, informative Bayesian priors?  
 [@crome_novel_1996]
-
-##
-
-\url{http://github.com/bbolker/discretization}
-
-\begin{center}
-\includegraphics[width=0.75\textwidth]{pix/changemymind.jpg}
-
-{\small https://imgflip.com}
-
-\end{center}
 
 ## References {.refs .columns-2 .allowframebreaks}
 

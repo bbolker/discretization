@@ -1,8 +1,14 @@
 \usepackage{multicol}
 \usepackage{graphicx}
+%% \usepackage[symbol]{footmisc}
+%% https://tex.stackexchange.com/questions/826/symbols-instead-of-numbers-as-footnote-markers
+\renewcommand*{\thefootnote}{\fnsymbol{footnote}}
+%% \renewcommand*{\thefootnote}{\fnsymbol{footnote}}
+
 \usepackage{url}
 \DeclareGraphicsExtensions{.png,.pdf,.jpg,.mps}
 \newcommand{\cemph}[1]{{\color{red} #1}}
+\newcommand{\bemph}[1]{{\color{blue} #1}}
 % https://stackoverflow.com/questions/20847371/two-column-layouts-in-rstudio-presentations-slidify-pandoc
 \def\begincols{\begin{columns}[T]}
 \def\begincol{\begin{column}}

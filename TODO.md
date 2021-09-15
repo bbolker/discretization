@@ -1,3 +1,10 @@
+# colloquium
+
+- work on sims????
+- fish-glands example
+- better refs?
+- stuff on high-dimensional inference
+
 # To do
 
 - add: @betini_why_2017, *Why are we not evaluating multiple competing hypotheses in ecology and evolution?*
