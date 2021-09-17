@@ -1,0 +1,5 @@
+Rscript -e "rmarkdown::render('colloq_discretization.rmd')"
+pdftk colloq_discretization.pdf cat 1 3-end output tmp.pdf
+mv tmp.pdf colloq_discretization.pdf
+scp colloq_discretization.pdf ms.mcmaster.ca:~/public_html/misc
+

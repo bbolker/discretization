@@ -1,5 +1,5 @@
 ---
-title: Nothing is zero in a multifactorial world \newline (and why it matters)
+title: Nothing is zero in a multifactorial world \newline (and why that matters)
 author: "Ben Bolker \\newline McMaster University"
 date: "17 September 2021"
 bibliography: discrete.bib
@@ -12,6 +12,7 @@ output:
   slide_level: 2
   keep_tex: true
 ---
+
 <!-- need to rmarkdown::render(), make rule doesn't get the header properly! -->
 <!-- 
 tex hacks required: remove empty frame at beginning; break line 
@@ -27,7 +28,7 @@ apa.csl is a slightly hacked version of APA
 <!-- .refs is style for reference page (small text) -->
 <style>
 .refs {
-font-size: 14px;
+font-size: 10px;
 }
 .sm_block {
  font-size: 20px;
@@ -85,6 +86,7 @@ div#after-column p.forceBreak {
 ```{r setup,echo=FALSE,message=FALSE, include=FALSE}
 library(tidyverse)
 library("ggplot2"); theme_set(theme_classic())
+library("colorspace")
 library("reshape2")
 library("ggExtra")
 library("MASS")
@@ -113,25 +115,27 @@ ideas: Jonathan Dushoff, Marm Kilpatrick, Brian McGill, Daniel Park, Daniel Ture
 
 ## what is a multifactorial system?
 
-- many processes contribute to pattern
+- many processes contribute to observed patterns  
+(e.g. all of biology/psychology/economics/epidemiology ...)
 - quantify *how* each process affects the system,  
 rather than testing *whether* we can detect its impact
-
-This talk is mostly about *inferential* or *scientific* questions
 
 ## what are we trying to do?
 
 - **prediction**: what do we expect in a specified scenario?
 - **inference**: what factors are affecting observed outcomes, and how much?
-   - (or: prediction/estimation of effects \cemph{with appropriate uncertainty bounds})
-   
+<!--   - (or: prediction/estimation of effects \cemph{with appropriate uncertainty bounds}) -->
+
+This talk will focus on inference.
+
 ## why do we pretend some effects are zero?
 
- we often consider \cemph{point hypotheses}, often as *counterfactual null hypotheses*
+\cemph{point hypotheses} = *counterfactual null hypotheses*
  
-- e.g.: "the delta variant has the same $R_0$ as earlier variants"; "masks do not prevent COVID transmission"
-- never\footnotemark true in biology/psychology/economics/epidemiology ...
+- e.g.: "the delta variant has the same $R_0$ as earlier variants"; "masks do not reduce COVID transmission"
+- never\footnote[1]{what, never?} true in multifactorial systems ...
 
+<!--
 more generally we might want to test among \emph{discrete} hypotheses:
 
 - "strong inference" [@platt_strong_1964]:  
@@ -139,16 +143,15 @@ more generally we might want to test among \emph{discrete} hypotheses:
 - testing among *many* discrete hypotheses  
 [@taper_evidential_2015]
 
-\footnote[1]{what, never?}
+-->
 
-## the method of multiple working hypotheses
-
-Chamberlin's \emph{method of multiple working hypotheses}  
-[@raup_method_1995]
+## Chamberlin's method of multiple working hypotheses
 
 <blockquote>
 ... the measure of participation of each [process] must be determined before a satisfactory elucidation can be reached. The full solution therefore involves not only a recognition of multiple participation but an estimate of the measure and mode of each participation ...
 </blockquote>
+
+(Chamberlin 1890 in @raup_method_1995)
 
 ## discretomania
 
@@ -158,7 +161,7 @@ Chamberlin's \emph{method of multiple working hypotheses}
 (\bemph{OK but maybe not optimal?})
 - stepwise regression (\cemph{not OK!})
 
-What is the goal of stepwise regression, and why is it a problem?
+Why do people use stepwise regression, and why is it a problem?
 
 <!-- animation?
 
@@ -167,7 +170,7 @@ https://www.mattblackwell.org/blog/2021/04/06/rmd-overlays/
 
 -->
 
-## overfitting (1)
+## under/overfitting (1) [@forsythe_computer_1977]
 
 ```{r overfit_calc}
 ## http://www.mathworks.com/products/matlab/demos.html?
@@ -177,7 +180,7 @@ dd <- data.frame(time = seq(1900,2000,by=10),
                    150.697,179.323,203.212,226.505,249.633,281.422)) %>%
     mutate(sct=(time-1950)/50)
 predframe <- tibble(time=seq(1900,2020, length=101)) %>% mutate(sct=(time-1950)/50)
-orders = c(1:4,8)
+orders = c(1:3,8)
 pred <- purrr::map_dfr(setNames(orders, orders),
                ~ {
                    m <- lm(pop ~ poly(sct, ., raw=TRUE), data=dd)
@@ -187,7 +190,7 @@ pred <- purrr::map_dfr(setNames(orders, orders),
                .id = "order")
 ```
 
-```{r overfit_plot, overlay.plot=5, fig.width=5}
+```{r overfit_plot, overlay.plot=4, fig.width=5}
 gg_full <- ggplot(pred, aes(time, pop)) +
     geom_point(data = dd, size=3) +
     geom_line(aes(colour=order)) +
@@ -199,7 +202,7 @@ for (i in seq_along(orders)) {
 }
 ```
 
-## overfitting/underfitting {.columns-2 .build}
+## under/overfitting (2) {.columns-2 .build}
 
 \begincols
 \begincol{0.5\textwidth}
@@ -223,15 +226,22 @@ for (i in seq_along(orders)) {
 
 ## no free lunches
 
-- data-based approaches to variable selection risk the \cemph{Texas sharpshooter fallacy}
-- we are choosing to set a subset of model coefficients/effects to zero
+- data-based approaches to selection $\to$  
+\cemph{Texas sharpshooter fallacy}
+- setting a subset of model coefficients/effects to zero
 - can we do better?
-- \cemph{model averaging}: instead of picking one model, combine them all (*shrinkage estimator*)
+- \cemph{model averaging}: instead of picking one model, combine them (a form of *shrinkage estimation*)
+
+\begin{center}
+\includegraphics[height=1.5in]{pix/hankin.png} \\
+\tiny C. Hankin
+\end{center}
 
 ## multimodel averaging  (MMA) [@burnham_model_2002]
 
-- ``information-theoretic" approach (Kullback-Leibler distance): 
-- typical (ecologist's) approach
+- one of many forms of model averaging: popular with ecologists
+- information-theoretic motivation (Kullback-Leibler distance)
+- typical approach
     - fit full model
 	- fit all (or many) submodels
 	- compute weights
@@ -251,9 +261,10 @@ three problems:
 
 \begincol{0.5\textwidth}
 
-- information-theoretic (IT) approaches framed as implementation of Chamberlin [@elliott_revisiting_2007]
-- but IT focuses on differentiating **discrete** hypotheses/models
-- submodels are straw men
+- information-theoretic approaches framed as implementing Chamberlin MMWH  
+[@elliott_revisiting_2007]
+- but IT/MMA works with **discrete** hypotheses/models  
+(counterfactual/straw men)
 - ¿ is this actually a problem ?
 
 \endcol
@@ -289,10 +300,10 @@ three problems:
 
 ## inferential problem: undercoverage {.build}
 
-- various methods for constructing MMA CIs [@burnham_model_2002;@fletcher2012model;@kabaila_model-averaged_2016]
+- lots of ways to construct MMA CIs [@burnham_model_2002;@fletcher2012model;@kabaila_model-averaged_2016]
 - MMA CIs are generally **too narrow**  
 [@turek2013frequentist;@kabaila_model-averaged_2016;@dormann_model_2018] but cf. @burnham_model_2002
-- general property of shrinkage estimators? e.g. ridge-regression CI width $\geq$ least-squares CI [@obenchain_classical_1977]
+- on the other hand, (properly constructed) ridge-regression CI width $\geq$ least-squares CI [@obenchain_classical_1977]
 
 
 ## undercoverage (2)
@@ -310,9 +321,70 @@ three problems:
 - lasso & ridge regression; random forests; Bayesian priors
 - complexity may be $\bigO(K^2 n)$ or $\bigO(K n \log(n))$ (vs $\bigO(2^K K^2 n)$ for brute force)
 [@hardy_machine_2017; @louppe_understanding_2014]  
-- but inference (i.e., confidence intervals) is still hard!
-   - **high-dimensional inference**: narrow scope, strong assumptions
-	
+
+## example: penalized regression
+
+```{r pen_reg}
+sctvec <- seq(min(dd$sct), max(dd$sct), length = 101)
+## fit0 <- lm(pop ~ splines::bs(sct, 10), data=dd)
+## pv <- attr(terms(fit0), "predvars")
+## ss <- mgcv::smoothCon(s(sct, bs = "bs", k=11), data=data.frame(sct=sctvec))
+## mm <- ss[[1]]$X
+## mm <- cbind(1,eval(pv[[3]], envir=list2env(list(sct = sctvec))))
+fit <- mgcv::gam(pop ~ s(sct, bs = "bs", k=11), data=dd)
+mm <- predict(fit, type = "lpmatrix", newdata=data.frame(sct=sctvec))
+colnames(mm) <- seq(ncol(mm))-1
+spldat <- (mm
+    %>% as_tibble()
+    %>% mutate(time = sctvec*50+1950, sct = sctvec)
+    %>% pivot_longer(matches("^[0-9]"), names_to="spl_i",
+                     names_transform = as.numeric)
+    %>% mutate(across(spl_i, ~factor(., levels = unique(.))))
+)
+
+ctab <- tibble(spl_i = factor(colnames(mm), levels = colnames(mm)),
+               beta = coef(fit))
+spldat2 <- (spldat
+    %>% full_join(ctab, by = "spl_i")
+    %>% filter(spl_i != "0")
+    %>% mutate(pop = coef(fit)[1] + beta*value)
+)
+gg_full <- ggplot(spldat2, aes(time, pop)) +
+    geom_point(data = dd, size=3) +
+    geom_smooth(data = dd, method="gam", formula= y~s(x, bs = "bs", k=11)) +
+    geom_line(aes(colour=spl_i)) +
+    theme(legend.position="none") +
+    labs(x="year", y="US population (millions)")
+print(gg_full)
+```
+
+## inference is still hard!
+
+- **high-dimensional inference** [@dezeure_high-dimensional_2015]
+- tries to account for data-dependent shrinkage
+- strong assumptions (big data, sparse effects) 
+
+## example: evolution of fish accessory glands
+
+- 12 parameters (rates of evolutionary gain/loss)
+- current method [@pagel_bayesian_2006]; compare Bell(12) = 4213597 models
+- or we could just estimate the parameters!
+
+\begincols
+\begincol{0.66\textwidth}
+
+\includegraphics[width=\textwidth]{pix/phylo.png}
+
+\endcol
+\begincol{0.33\textwidth}
+
+\pause
+
+\includegraphics[width=\textwidth]{pix/skinny_contrasts.png}
+
+\endcol
+\endcols
+
 ## conclusions: what should you do?
 
 - for **inference**:
@@ -324,6 +396,3 @@ three problems:
 ## References {.refs .columns-2 .allowframebreaks}
 
 \tiny
-
-
-

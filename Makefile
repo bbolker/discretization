@@ -4,6 +4,10 @@
 
 ###################################################################
 
+colloq_discretization.pdf:
+	Rscript -e "rmarkdown::render('colloq_discretization.rmd')"
+
+
 # stuff
 
 Sources += Makefile .gitignore
