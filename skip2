@@ -1,0 +1,2 @@
+pdftk $1.pdf cat 1 3-end output tmp.pdf
+mv tmp.pdf $1.pdf

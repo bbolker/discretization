@@ -121,7 +121,7 @@ ideas: Jonathan Dushoff, Marm Kilpatrick, Brian McGill, Daniel Park, Daniel Ture
 
 ## terminology
 
-\includegraphics[height=0.8\textheight]{humpty2c.png}
+\includegraphics[height=0.8\textheight]{pix/humpty2c.png}
 
 ## what do I mean by inference?
 
@@ -154,7 +154,7 @@ ideas: Jonathan Dushoff, Marm Kilpatrick, Brian McGill, Daniel Park, Daniel Ture
 
 ## e.g. bias-variance tradeoff in ridge regression
 
-![](islr_biasvar_ed.png)
+![](pix/islr_biasvar_ed.png)
 
 ## data-driven tuning
 
@@ -184,7 +184,7 @@ ideas: Jonathan Dushoff, Marm Kilpatrick, Brian McGill, Daniel Park, Daniel Ture
  
 ## coverage example [@li_fitting_2018]
 
-![coverage plot for 90% intervals](li_coverage3.png)
+![coverage plot for 90% intervals](pix/li_coverage3.png)
 
 ## why coverage is better than type 1 error (mini-rant) {.columns-2}
  
@@ -199,7 +199,7 @@ ideas: Jonathan Dushoff, Marm Kilpatrick, Brian McGill, Daniel Park, Daniel Ture
 \endcol
 \begincol{0.3\textwidth}
 
-![](simpson_oldman.jpg)
+![](pix/simpson_oldman.jpg)
 \endcol
 \endcols
 
@@ -220,7 +220,7 @@ AIC-stepwise regression, simulated data
 `lm(y ~ .)` + `step()`  
 $n=100$, $p=90$, $\beta \sim U(-1,1)$, $\sigma^2_r=5$; 90% CIs
 
-\includegraphics[height=0.6\textwidth]{stepcoef.png}
+\includegraphics[height=0.6\textwidth]{pix/stepcoef.png}
 
 cf. @freedman_note_1983
 
@@ -279,7 +279,7 @@ knitr::kable(allres_step_tbl, digits = 3)
 
 ## there ain't no such thing as a free lunch ...
 
-![](tanstaafl.jpg)
+![](pix/tanstaafl.jpg)
 
 ## (blank)
 
