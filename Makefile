@@ -4,6 +4,9 @@
 
 ###################################################################
 
+ares_sims.rda:
+	R CMD BATCH --vanilla ares_sims.R
+
 colloq_discretization.pdf:
 	Rscript -e "rmarkdown::render('colloq_discretization.rmd')"
 

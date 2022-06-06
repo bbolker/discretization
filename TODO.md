@@ -1,3 +1,8 @@
+# Stockholm
+
+- work on sims
+- more HDI stuff. almost-sparse?
+
 # colloquium
 
 - work on sims????

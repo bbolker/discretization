@@ -46,14 +46,27 @@ my_tidy <- function(L, c_level = 0.9, beta) {
 
 order_terms <- . %>% mutate(across(term, ~reorder(factor(.), estimate)))
 
+wrap_binom.test <- function(x, n) {
+    if (is.na(x)) {
+        warning("NA x")
+        return(list(conf.int = rep(NA_real_, 2)))
+    }
+    if (x < 0 || trunc(x) != x) {
+        warning("neg or integer x: ", x)
+        return(list(conf.int = rep(NA_real_, 2)))
+    }
+    return(binom.test(x = x, n = n))
+}
+
 get_coverage <- (.
+  %>% na.omit()
   %>% summarise(n = n(),
-                n_ok = sum(lwr < true & true < upr))
+                n_ok = sum(lwr < true & true < upr, na.rm = TRUE))
   %>% rowwise()
   %>% mutate(
           prop = n_ok/n,
-          lwr = binom.test(x = n_ok, n = n)$conf.int[1],
-          upr =  binom.test(x = n_ok, n = n)$conf.int[2])
+          lwr = wrap_binom.test(x = n_ok, n = n)$conf.int[1],
+          upr =  wrap_binom.test(x = n_ok, n = n)$conf.int[2])
 )
 
 
@@ -155,6 +168,7 @@ simfun2 <- function(r, c_level = 0.9, seed = NULL) {
 }
 
 ## coverage calculation
+set.seed(101)
 allres <- furrr::future_map_dfr(1:200, simfun2)
 allres_step_tbl <- (allres
   %>% group_by(model)
@@ -263,7 +277,7 @@ fci_cv <- (xvars
 
 ridge0c <- drop(coef(fit_ridge0))[-1]
 plot(ridge0c, coef(fullfit))
-all.equal( coef(fullfit))
+## all.equal( coef(fullfit))
 
 
 ff <- fitfun(ss$dd)
@@ -276,7 +290,7 @@ beta_dev <- sweep(ff$beta, MARGIN = 1, STATS = ss$beta, FUN = "-")
 plot(sqrt(colSums(beta_dev^2)))
 
 beta_dev2 <- sweep(ff$beta, MARGIN = 1, STATS = par2, FUN = "-")
-plot.cv.glmnet(ff)
+## plot.cv.glmnet(ff)
 plot(sqrt(colSums(beta_dev2^2)))
 
 plot(ff$beta[1,] - ss$beta[1])
@@ -393,9 +407,9 @@ regfit.full <- regsubsets(Salary~., data = hh, nvmax = 19)
 summary(regfit.full)$cp
 plot(regfit.full, scale = "Cp")
 
-replicate(
-    cc <- cv.glmnet(y = y, x = X, alpha = 0, intercept = FALSE)
-  lambda <- glmnet_model[[lchoice]]
-  theta <- as.matrix(coef(glmnet_model, s = lambda))
+## replicate(
+##     cc <- cv.glmnet(y = y, x = X, alpha = 0, intercept = FALSE)
+##   lambda <- glmnet_model[[lchoice]]
+##   theta <- as.matrix(coef(glmnet_model, s = lambda))
 
 
