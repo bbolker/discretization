@@ -63,3 +63,5 @@ makestuff/
 
 Rplots.pdf
 *.rda
+\#*
+.#*

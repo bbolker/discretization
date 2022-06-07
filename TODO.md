@@ -1,7 +1,7 @@
 # Stockholm
 
-- work on sims (hdi, hdm
-- more HDI stuff. approximate sparsity
+- work on sims (hdi, hdm, lasso + boot??)
+- more HDI stuff. approximate sparsity (in `hdm`/`rlasso` docs??)
 
 # colloquium
 
