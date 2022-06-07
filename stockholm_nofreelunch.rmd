@@ -106,8 +106,9 @@ ideas: Jonathan Dushoff, Marm Kilpatrick, Brian McGill, Daniel Park, Daniel Ture
 
 ## scope of this talk
 
-- full-rank ($p < n$), **non-sparse** problems
+- (mostly) full-rank ($p < n$), **non-sparse** problems
 - science oriented (ecology/evolution) 
+- applied! (and philosophical ...)
 
 ## what are we doing when we do statistics?
 
@@ -125,12 +126,13 @@ ideas: Jonathan Dushoff, Marm Kilpatrick, Brian McGill, Daniel Park, Daniel Ture
 
 ## what do I mean by inference?
 
-- **not** concerned with *formal* causal inference
+- **not** concerned with formal causal inference (DAGS, `do`-inference etc. [@pearl_interpretation_2019])
 - evaluation of uncertainty
 - what would we expect to see in future data?
    - *coefficients*: uncertainty around the effect of a change in the predictors
    - *predictions*: uncertainty around the value observed for specified predictor values
-   - *p-values*: uncertainty around a counterfactual null
+   - *significance testing*: uncertainty around expectations from a counterfactual null
+- primarily interested in **coverage properties**
 
 ## data-driven model tuning for point estimates {.columns-2}
 
@@ -160,10 +162,10 @@ ideas: Jonathan Dushoff, Marm Kilpatrick, Brian McGill, Daniel Park, Daniel Ture
 
 - stepwise/subset regression, ridge/lasso/elastic net, random forests, boosting ...
 - need to choose *appropriate* model complexity
-   - model size (selection) or complexity (shrinkage)
+   - model size (selection methods) or complexity penalty (shrinkage methods)
    - estimate out-of-sample error without (explicit) cross-validation (AIC, Cp, BIC, out-of-bag error, ...)
    - or explicit cross-validation
-- may need to tune model **hyperparameters** (e.g. via cross-validation)
+- tune model **hyperparameters** (e.g. via cross-validation)
 
 <!-- - *note* CV usually assumes *independent* sampling  
 [@wenger_assessing_2012; @roberts_cross-validation_2017] -->
@@ -239,6 +241,7 @@ knitr::kable(allres_step_tbl, digits = 3)
 
 ## multimodel averaging (MMA)
 
+- extremely popular in ecology (as a solution [??] to the problems of significance testing)
 - various methods for constructing MMA CIs [@burnham_model_2002;@fletcher2012model;@kabaila_model-averaged_2016]
 - MMA CIs are generally **too narrow**  
 [@turek2013frequentist;@kabaila_model-averaged_2016;@dormann_model_2018] but cf. @burnham_model_2002
@@ -249,14 +252,23 @@ knitr::kable(allres_step_tbl, digits = 3)
 
 ## What about post-selection inference?
 
-- Lots of exciting work 
+- extremely active area
 - focused on high dimensions, depends on strong assumptions
-    - sparsity
+    - sparsity (e.g. $s \approx n/\log p$) @belloni_inference_2013
 	- coefficient gap (minimum size of smallest $|\beta|$)
 	- asymptopia
-- e.g. @dezeure_high-dimensional_2015:
+- typical biological problems: $n \approx 50 -- 200$, $p \approx 500 -- 5000$ [@buhlmann_high-dimensional_2014]
+- thus we need $s \approx  12 - 30$ (or less!)
+
+## Post-selection inference (continued)
+
+-  @dezeure_high-dimensional_2015:
 
 > When the truth (or the linear approximation of the true model) is nonsparse, the methods are expected to break down ...
+
+- @potscher_confidence_2009:
+
+> Any confidence set based on a sparse estimator is necessarily large relative to more standard confidence sets ... that have the same guaranteed coverage probability
 
 - See Cosma Shalizi's notes at {\small <http://bactra.org/notebooks/post-model-selection-inference.html>}
 
@@ -266,8 +278,11 @@ knitr::kable(allres_step_tbl, digits = 3)
     - Bayesian CIs are well-calibrated *by definition*, conditional on the model and the priors ...  
 [@gelman_avoiding_1995; @cook_validation_2006; @talts_validating_2020]
 - pseudo-Bayesian assumptions about effect size distributions
+- **approximate sparsity**/**compressibility** (???):  $|\beta(k)| \leq C^k-r$, $r>0$ 
 
-## conclusions: what should you do?
+<!-- Web of Science: (ALL=("approximately sparse")) NOT ALL=(signal) NOT ALL=(compressive) NOT ALL=(image) NOT ALL=(feedback) ; 38 hits-->
+
+## conclusions: what should a scientist do?
 
 - for **inference**:
     - use the full model
@@ -276,10 +291,6 @@ knitr::kable(allres_step_tbl, digits = 3)
     - use CIs from shrinkage estimates with caution
     - use non-neutral, informative Bayesian priors?  
 [@crome_novel_1996]
-
-## there ain't no such thing as a free lunch ...
-
-![](pix/tanstaafl.jpg)
 
 ## (blank)
 
@@ -321,5 +332,8 @@ rather than testing *whether* we can detect its impact
 
 ## References {.refs .columns-2 .allowframebreaks}
 
-\tiny
+::: {#refs}
+:::
+
+
 

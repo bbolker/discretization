@@ -4,6 +4,10 @@
 
 ###################################################################
 
+stockholm_nofreelunch.pdf: stockholm_nofreelunch.rmd discrete.bib
+	Rscript -e "rmarkdown::render('stockholm_nofreelunch.rmd')"
+	bash ./skip2 stockholm_nofreelunch
+
 ares_sims.rda:
 	R CMD BATCH --vanilla ares_sims.R
 

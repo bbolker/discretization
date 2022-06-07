@@ -60,3 +60,6 @@ clonedir/
 *.mk
 *.Rout
 makestuff/
+
+Rplots.pdf
+*.rda

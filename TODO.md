@@ -1,7 +1,7 @@
 # Stockholm
 
-- work on sims
-- more HDI stuff. almost-sparse?
+- work on sims (hdi, hdm
+- more HDI stuff. approximate sparsity
 
 # colloquium
 
