@@ -4,7 +4,7 @@
 
 ###################################################################
 
-stockholm_nofreelunch.pdf: stockholm_nofreelunch.rmd discrete.bib
+stockholm_nofreelunch.pdf: stockholm_nofreelunch.rmd discrete.bib header.tex
 	Rscript -e "rmarkdown::render('stockholm_nofreelunch.rmd')"
 	bash ./skip2 stockholm_nofreelunch
 

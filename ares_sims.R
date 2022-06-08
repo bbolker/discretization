@@ -6,6 +6,7 @@ library(tidyverse)
 library(furrr)
 library(progressr)
 library(bcaboot)
+library(hdm)
 
 ## FIXME: figure out how seeds really work
 fopts <- furrr_options(seed = 101)
@@ -178,6 +179,27 @@ allres_step_tbl <- (allres
 obj_list  <- "allres_step_tbl"
 save(list = obj_list, file = "ares_sims.rda")
 
+
+simfun3 <- function(r, c_level = 0.9, seed = NULL) {
+  if (!is.null(seed)) set.seed()
+  cat(".")
+  ss <- simfun(n = 100, p = 40, sig_r = 5)
+  fullfit  <- lm (y ~ ., data = ss$dd)
+  form <- reformulate(setdiff(names(ss$dd), "y"), response = "y")
+  form0 <- reformulate(setdiff(names(ss$dd), "y"))
+  rlasso(form, data = ss$dd)
+  re <- rlassoEffects(form, data = ss$dd, I = form0)
+  confint(re, level = 0.9)
+  fit_step <- step(fullfit, trace=0)
+  tt <- (list(full=fullfit, step = fit_step)
+    |> my_tidy(beta = ss$beta, c_level = c_level)
+    |> order_terms()
+    |> mutate(rep = r)
+  )
+  return(tt)
+}
+
+quit()
 
 ## now do the same for glmnet (with parameters via bcaboot: check with lambda -> 0?)
 

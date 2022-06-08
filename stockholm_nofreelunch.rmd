@@ -7,11 +7,13 @@ output:
     includes:
       in_header: ./header.tex
       after_body: ./suffix.tex
-author: "Ben Bolker \\newline McMaster University"
+author: "Ben Bolker"
 date: "8 June 2022"
 bibliography: discrete.bib
-csl: reflist2.csl
+csl: apa.csl
 ---
+
+<! -- https://stackoverflow.com/questions/25890939/inserting-logo-into-beamer-presentation-using-r-markdown -->
 
 <!-- tex hacks required: remove empty frame at beginning; break line in title (Burnham ref; add \framebreak manually to refs (ugh) -->
 <!-- 
@@ -81,6 +83,28 @@ div#after-column p.forceBreak {
 }
 </style>
 
+<!-- https://stackoverflow.com/questions/41579766/adding-an-image-to-the-title-page-of-ioslides-presentation -->
+<script>
+
+    .gdbar img {
+        width: 300px !important;
+        height: 150px !important;
+        margin: 8px 8px;
+    }
+
+    .gdbar {
+        width: 400px !important;
+        height: 170px !important;
+    }
+
+    slides > slide:not(.nobackground):before {
+        width: 150px;
+        height: 75px;
+        background-size: 150px 75px;
+    }
+
+</script>
+
 ```{r setup, include = FALSE}
 library("ggplot2"); theme_set(theme_classic())
 library("reshape2")
@@ -114,7 +138,7 @@ ideas: Jonathan Dushoff, Marm Kilpatrick, Brian McGill, Daniel Park, Daniel Ture
 
 - exploration
     - look for interesting patterns
-	- confirm with followup observations
+	- confirm with follow-up observations
 - prediction
     - best guess at future outcomes under specified conditions
 - inference
@@ -126,11 +150,11 @@ ideas: Jonathan Dushoff, Marm Kilpatrick, Brian McGill, Daniel Park, Daniel Ture
 
 ## what do I mean by inference?
 
-- **not** concerned with formal causal inference (DAGS, `do`-inference etc. [@pearl_interpretation_2019])
+- **not** concerned with formal causal inference (DAGs, `do`-inference etc. [@pearl_interpretation_2019])
 - evaluation of uncertainty
 - what would we expect to see in future data?
-   - *coefficients*: uncertainty around the effect of a change in the predictors
-   - *predictions*: uncertainty around the value observed for specified predictor values
+   - *coefficients*: uncertainty in $\Delta \textrm{response} | \Delta \textrm{predictor}$
+   - *predictions*: uncertainty in $\Delta \textrm{response} | \textrm{predictor}$
    - *significance testing*: uncertainty around expectations from a counterfactual null
 - primarily interested in **coverage properties**
 
@@ -139,7 +163,7 @@ ideas: Jonathan Dushoff, Marm Kilpatrick, Brian McGill, Daniel Park, Daniel Ture
 \begincols
 \begincol{0.5\textwidth}
 
-- avoid omitting potentially important predictors
+- make sure to include important predictors
 - avoid overfitting
 - $\approx$ optimize bias-variance tradeoff
 
@@ -160,12 +184,14 @@ ideas: Jonathan Dushoff, Marm Kilpatrick, Brian McGill, Daniel Park, Daniel Ture
 
 ## data-driven tuning
 
-- stepwise/subset regression, ridge/lasso/elastic net, random forests, boosting ...
-- need to choose *appropriate* model complexity
-   - model size (selection methods) or complexity penalty (shrinkage methods)
-   - estimate out-of-sample error without (explicit) cross-validation (AIC, Cp, BIC, out-of-bag error, ...)
-   - or explicit cross-validation
-- tune model **hyperparameters** (e.g. via cross-validation)
+- all (?) modern statistical learning techniques:  
+subset regression, ridge/lasso/elastic-net, random forests, boosting, ...
+- choose appropriate model complexity
+   - model size (selection methods) **or**  
+complexity penalty (shrinkage methods)
+   - out-of-sample error estimated implicitly (AIC, Cp, BIC) ... **or**  
+explicitly (cross-validation, out-of-bag error)
+- tune model **hyperparameters** to optimize bias-variance tradeoff
 
 <!-- - *note* CV usually assumes *independent* sampling  
 [@wenger_assessing_2012; @roberts_cross-validation_2017] -->
@@ -183,7 +209,11 @@ ideas: Jonathan Dushoff, Marm Kilpatrick, Brian McGill, Daniel Park, Daniel Ture
 - **coverage**: does an $x$% confidence interval include the true value $x$% of the time?
 - (mentioned 0 $\times$ in @james_introduction_2013,  
 1 $\times$ in @hastie_elements_2009)
- 
+
+\includegraphics[width=2.5cm]{pix/islr.png}
+\includegraphics[width=2.5cm]{pix/esl.png}
+
+
 ## coverage example [@li_fitting_2018]
 
 ![coverage plot for 90% intervals](pix/li_coverage3.png)
@@ -208,7 +238,8 @@ ideas: Jonathan Dushoff, Marm Kilpatrick, Brian McGill, Daniel Park, Daniel Ture
  
 ## naive selection methods
 
-Post-selection inference that *ignores the selection process* is always be overoptimistic
+Post-selection inference that **ignores the selection process**  
+will always (?) be overoptimistic
 
 - @altman_bootstrap_1989
 
@@ -222,9 +253,14 @@ AIC-stepwise regression, simulated data
 `lm(y ~ .)` + `step()`  
 $n=100$, $p=90$, $\beta \sim U(-1,1)$, $\sigma^2_r=5$; 90% CIs
 
-\includegraphics[height=0.6\textwidth]{pix/stepcoef.png}
-
+\begincols
+\begincol{0.7\textwidth}
+\includegraphics[height=\textwidth]{pix/stepcoef.png}
+\endcol
+\begincol{0.3\textwidth}
 cf. @freedman_note_1983
+\endcol
+\endcols
 
 ## coverage results (90% CIs)
 
@@ -252,13 +288,16 @@ knitr::kable(allres_step_tbl, digits = 3)
 
 ## What about post-selection inference?
 
-- extremely active area
-- focused on high dimensions, depends on strong assumptions
-    - sparsity (e.g. $s \approx n/\log p$) @belloni_inference_2013
-	- coefficient gap (minimum size of smallest $|\beta|$)
-	- asymptopia
-- typical biological problems: $n \approx 50 -- 200$, $p \approx 500 -- 5000$ [@buhlmann_high-dimensional_2014]
-- thus we need $s \approx  12 - 30$ (or less!)
+- active research area
+- focuses on high dimensions, depends on strong assumptions
+    - sparsity (e.g. $s/n \approx 1/\log p$) [@belloni_inference_2013]
+	- and/or coefficient gap (minimum size of smallest $|\beta|$)
+	- asymptotics
+- typical biological problems: $n \approx 50 - 200$, $p \approx 500 - 5000$ [@buhlmann_high-dimensional_2014]
+- thus we need $s \approx  12 - 30$, $s/n \approx 0.12 - 0.16$
+- **approximate sparsity**/**compressibility**  
+[@chernozhukov_hdm_2016]:  
+$|\beta_0|(j) \leq Aj^{-\alpha}$, $\alpha > 1/2$, $\approx s \propto n^{\frac{1}{2\alpha}}$
 
 ## Post-selection inference (continued)
 
@@ -277,20 +316,21 @@ knitr::kable(allres_step_tbl, digits = 3)
 - go Bayesian! 
     - Bayesian CIs are well-calibrated *by definition*, conditional on the model and the priors ...  
 [@gelman_avoiding_1995; @cook_validation_2006; @talts_validating_2020]
-- pseudo-Bayesian assumptions about effect size distributions
-- **approximate sparsity**/**compressibility** (???):  $|\beta(k)| \leq C^k-r$, $r>0$ 
+- pseudo-Bayesian assumptions about effect size distributions (back to approximate sparsity?)
 
 <!-- Web of Science: (ALL=("approximately sparse")) NOT ALL=(signal) NOT ALL=(compressive) NOT ALL=(image) NOT ALL=(feedback) ; 38 hits-->
 
 ## conclusions: what should a scientist do?
 
+For now, for moderate-size data:
+
 - for **inference**:
     - use the full model
     - *a priori* model reduction [@harrell_regression_2001]
+	- neutral but informative Bayesian priors
 - for **prediction**:
     - use CIs from shrinkage estimates with caution
-    - use non-neutral, informative Bayesian priors?  
-[@crome_novel_1996]
+	- pre-specify shrinkage?
 
 ## (blank)
 
@@ -332,6 +372,7 @@ rather than testing *whether* we can detect its impact
 
 ## References {.refs .columns-2 .allowframebreaks}
 
+\tiny
 ::: {#refs}
 :::
 
