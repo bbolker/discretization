@@ -1,3 +1,8 @@
+## pub
+
+- more cleanup of text
+- replicate Figure 4 from Dormann et al (piano plots for linear models)
+
 # Stockholm
 
 - work on sims (hdi, hdm, lasso + boot??)

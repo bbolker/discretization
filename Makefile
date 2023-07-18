@@ -4,7 +4,7 @@
 
 ###################################################################
 
-stockholm_nofreelunch.pdf: stockholm_nofreelunch.rmd discrete.bib header.tex
+stockholm_nofreelunch.pdf: stockholm_nofreelunch.rmd discrete.bib header.tex ares_sims.rda
 	Rscript -e "rmarkdown::render('stockholm_nofreelunch.rmd')"
 	bash ./skip2 stockholm_nofreelunch
 
@@ -65,7 +65,7 @@ simdata/fzc.rds: R/mmasim_batch.R
 ##	$(RCMD) R/mmasim_batch.R frc 20 300 full 10 0.02 unif
 
 Sources += discrete.bib discrete.rmd
-discrete.pdf: discrete.rmd
+discrete.pdf: discrete.rmd body.rmd abstract.rmd discrete.bib
 
 Sources += isec_abstract.md
 
