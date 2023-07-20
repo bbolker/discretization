@@ -46,9 +46,8 @@ simdata/fzc.rds: R/mmasim_batch.R
 ## simdata/frc.rds: R/mmasim_batch.R
 ##	$(RRun) frc 20 300 full 10 0.02 unif
 
-Sources += discrete.bib discrete.rmd
+Sources += $(wildcard *.bib *.rmd)
 Ignore += discrete.pdf
-
 discrete.pdf: discrete.rmd body.rmd abstract.rmd discrete.bib
 
 Sources += isec_abstract.md
