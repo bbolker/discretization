@@ -1,6 +1,8 @@
-## Hooks
 
 -include target.mk
+
+Sources += Makefile .gitignore
+Ignore = makestuff
 
 ###################################################################
 
@@ -14,57 +16,39 @@ ares_sims.rda:
 colloq_discretization.pdf:
 	Rscript -e "rmarkdown::render('colloq_discretization.rmd')"
 
-
-# stuff
-
-Sources += Makefile .gitignore
-Ignore += .ignore
-
-## You can change the location of makestuff in local.mk
-msrepo = https://github.com/dushoff
-ms = ./makestuff
-Ignore += local.mk
--include local.mk
--include $(ms)/os.mk
-
-Makefile: $(ms)
-
-$(ms):
-	cd $(dir $(ms)) && git clone $(msrepo)/$(notdir $(ms)).git
-
-Ignore += $(ms)
-
-RCMD = Rscript --vanilla
 ######################################################################
 
-## Content
+RCMD = Rscript --vanilla
+RRun = Rscript --vanilla $<
 
 Sources += $(wildcard *.R R/*.R)
 mmasim.html: mmasim.R simdata/c.rds simdata/f.rds simdata/f20.rds simdata/f20.rds simdata/fzc.rds simdata/fnc.rds ## simdata/frc.rds 
 
 ## params: n_true n_reps avg_method n_full pcor ctype
 simtest.rds: R/mmasim_batch.R
-	$(RCMD) R/mmasim_batch.R test 20 10 mma 10 0.3 compsym 
+	$(RRun) test 20 10 mma 10 0.3 compsym 
 
 simdata/c.rds: R/mmasim_batch.R
-	$(RCMD) R/mmasim_batch.R c 20 300 mma 10 0.3 compsym
+	$(RRun) c 20 300 mma 10 0.3 compsym
 
 simdata/f.rds: R/mmasim_batch.R
-	$(RCMD) R/mmasim_batch.R f 20 300 full 10 0.3 compsym
+	$(RRun) f 20 300 full 10 0.3 compsym
 
 simdata/fnc.rds: R/mmasim_batch.R
-	$(RCMD) R/mmasim_batch.R fnc 20 300 full 10 -0.05 compsym
+	$(RRun) fnc 20 300 full 10 -0.05 compsym
 
 simdata/f20.rds: R/mmasim_batch.R
-	$(RCMD) R/mmasim_batch.R f20 20 300 full 20 0.3 compsym
+	$(RRun) f20 20 300 full 20 0.3 compsym
 
 simdata/fzc.rds: R/mmasim_batch.R
-	$(RCMD) R/mmasim_batch.R fzc 20 300 full 10 0.0 zero
+	$(RRun) fzc 20 300 full 10 0.0 zero
 
 ## simdata/frc.rds: R/mmasim_batch.R
-##	$(RCMD) R/mmasim_batch.R frc 20 300 full 10 0.02 unif
+##	$(RRun) frc 20 300 full 10 0.02 unif
 
 Sources += discrete.bib discrete.rmd
+Ignore += discrete.pdf
+
 discrete.pdf: discrete.rmd body.rmd abstract.rmd discrete.bib
 
 Sources += isec_abstract.md
@@ -94,6 +78,17 @@ Sources += README.md TODO.md
 
 ######################################################################
 
--include $(ms)/visual.mk
--include $(ms)/git.mk
+# stuff
 
+msrepo = https://github.com/dushoff
+
+Makefile: makestuff/00.stamp
+makestuff/%.stamp:
+	- $(RM) makestuff/*.stamp
+	(cd makestuff && $(MAKE) pull) || git clone --depth 1 $(msrepo)/makestuff
+	touch $@
+
+-include makestuff/os.mk
+
+-include makestuff/git.mk
+-include makestuff/visual.mk
