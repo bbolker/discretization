@@ -1,6 +1,6 @@
 ---
 title: "Multimodel approaches are not the best way to understand multifactorial systems"
-author: Ben Bolker
+author: Benjamin M. Bolker^[Departments of Biology and Mathematics & Statistics, McMaster University, Hamilton, Ontario, Canada; `bolker@mcmaster.ca`; ORCID 0000-0002-2127-0443]
 output: pdf_document
 date: "`r format(Sys.time(), '%d %B %Y')`"
 header-includes:
@@ -10,10 +10,10 @@ fontsize: 12pt
 bibliography: discrete.bib
 ---
 
-```{r child = 'abstract.rmd'}
+```{r abstract, child = 'abstract.rmd'}
 ```
 
 ----
 
-```{r child = 'body.rmd'}
+```{r body, child = 'body.rmd'}
 ```
