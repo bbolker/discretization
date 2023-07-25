@@ -5,6 +5,8 @@ output: pdf_document
 date: "`r format(Sys.time(), '%d %B %Y')`"
 header-includes:
    - \usepackage{palatino}
+   - \usepackage[left]{lineno}
+   - \linenumbers
 geometry: margin=1.5in
 fontsize: 12pt
 bibliography: discrete.bib
