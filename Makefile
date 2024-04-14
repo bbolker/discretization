@@ -55,6 +55,15 @@ Ignore += discrete.pdf
 discrete.pdf: discrete.rmd body.md abstract.md discrete.bib
 discrete.tex: discrete.rmd body.md abstract.md discrete.bib
 
+abstract.tex: abstract.md
+	pandoc abstract.md -o abstract.tex
+
+body.tex: abstract.md
+	pandoc body.md -o body.tex
+
+entropy_ms.pdf:	entropy_ms.tex abstract.tex body.tex
+	texi2dvi -p entropy_ms.tex
+
 Sources += isec_abstract.md
 
 Sources += README.md TODO.md

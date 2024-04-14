@@ -102,3 +102,4 @@ cpdir/
 *.newdiff
 *.blame
 *.vrb
+*.blg

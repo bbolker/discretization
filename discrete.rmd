@@ -12,6 +12,7 @@ fontsize: 12pt
 bibliography: discrete.bib
 ---
 
+### Abstract
 
 ```{r abstract, child = 'abstract.md'}
 ```
