@@ -51,7 +51,9 @@ simdata/fzc.rds: R/mmasim_batch.R
 
 Sources += $(wildcard *.bib *.rmd)
 Ignore += discrete.pdf
+
 discrete.pdf: discrete.rmd body.md abstract.md discrete.bib
+discrete.tex: discrete.rmd body.md abstract.md discrete.bib
 
 Sources += isec_abstract.md
 
@@ -63,6 +65,9 @@ Sources += README.md TODO.md
 
 %.pdf: %.rmd
 	echo "rmarkdown::render(\"$<\",output_format=\"pdf_document\")" | R --slave
+
+%.tex: %.rmd
+	echo "rmarkdown::render(\"$<\",output_format=\"latex_document\")" | R --slave
 
 %.html: %.rmd
 	echo "rmarkdown::render(\"$<\",output_format=\"html_document\")" | R --slave

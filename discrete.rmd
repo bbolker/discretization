@@ -12,8 +12,10 @@ fontsize: 12pt
 bibliography: discrete.bib
 ---
 
+
 ```{r abstract, child = 'abstract.md'}
 ```
+A version of this paper is available as a preprint at https://doi.org/10.32942/X2Z01P
 
 ----
 
