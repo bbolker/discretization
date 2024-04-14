@@ -12,10 +12,10 @@ fontsize: 12pt
 bibliography: discrete.bib
 ---
 
-```{r abstract, child = 'abstract.rmd'}
+```{r abstract, child = 'abstract.md'}
 ```
 
 ----
 
-```{r body, child = 'body.rmd'}
+```{r body, child = 'body.md'}
 ```

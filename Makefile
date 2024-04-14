@@ -4,6 +4,9 @@
 Sources += Makefile .gitignore
 Ignore = makestuff
 
+texclean:
+	rm -f *.aux *.log *.bbl *.blg
+
 ###################################################################
 
 stockholm_nofreelunch.pdf: stockholm_nofreelunch.rmd discrete.bib header.tex ares_sims.rda
@@ -48,7 +51,7 @@ simdata/fzc.rds: R/mmasim_batch.R
 
 Sources += $(wildcard *.bib *.rmd)
 Ignore += discrete.pdf
-discrete.pdf: discrete.rmd body.rmd abstract.rmd discrete.bib
+discrete.pdf: discrete.rmd body.md abstract.md discrete.bib
 
 Sources += isec_abstract.md
 
