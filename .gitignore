@@ -103,3 +103,10 @@ cpdir/
 *.blame
 *.vrb
 *.blg
+
+entropy_ms.pdf
+body.tex
+body0.tex
+bibfile.tex
+abstract.tex
+template.pdf

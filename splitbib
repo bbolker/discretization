@@ -1,0 +1,15 @@
+#!/bin/bash
+
+# Usage: ./split.sh file.tex regex
+
+file=$1
+regex=$2
+
+# Use awk to find the line number that matches the regex
+line=$(awk "/$regex/{ print NR; exit }" $file)
+
+# Use sed to split the file into two parts
+sed -n "$((line)),$ p" $file |
+   sed -e 's/\[\\citeproctext\]//' | \
+   grep -iv CSL > bibfile.tex
+sed -n "1,$((line-1))p" $file > body.tex

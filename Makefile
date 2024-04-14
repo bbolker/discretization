@@ -58,11 +58,12 @@ discrete.tex: discrete.rmd body.md abstract.md discrete.bib
 abstract.tex: abstract.md
 	pandoc abstract.md -o abstract.tex
 
-body.tex: abstract.md
-	pandoc body.md -o body.tex
+body.tex: body.md
+	pandoc body.md --citeproc --bibliography=discrete.bib -o body0.tex
+	./splitbib body0.tex label{references}
 
-entropy_ms.pdf:	entropy_ms.tex abstract.tex body.tex
-	texi2dvi -p entropy_ms.tex
+entropy_ms.pdf:	entropy_ms.tex abstract.tex body.tex bibfile.tex splitbib
+	pdflatex entropy_ms.tex; bibtex entropy_ms; pdflatex entropy_ms.tex; pdflatex entropy_ms.tex
 
 Sources += isec_abstract.md
 
