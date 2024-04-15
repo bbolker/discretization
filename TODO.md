@@ -1,7 +1,6 @@
 ## pub
 
-- more cleanup of text
-- replicate Figure 4 from Dormann et al (piano plots for linear models)
+* tweak workflow (split out acknowledgements; )
 
 # Stockholm
 

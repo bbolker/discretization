@@ -60,10 +60,14 @@ abstract.tex: abstract.md
 
 body.tex: body.md
 	pandoc body.md --citeproc --bibliography=discrete.bib -o body0.tex
-	./splitbib body0.tex label{references}
+	./splitbib body0.tex label{acknowledgements} body.tex tail1.tex
+	./splitbib tail1.tex label{references} acknowledgements0.tex bibfile0.tex
+	grep -v "label{acknowledgements}" <acknwledgements0.tex >acknowledgements.tex
+	sed -i -e 's/\[\\citeproctext\]//' <bibfile0.tex | grep -iv CSL >bibfile.tex
 
+## don't need bibtex, gets handled in body processing
 entropy_ms.pdf:	entropy_ms.tex abstract.tex body.tex bibfile.tex splitbib
-	pdflatex entropy_ms.tex; bibtex entropy_ms; pdflatex entropy_ms.tex; pdflatex entropy_ms.tex
+	pdflatex entropy_ms.tex
 
 Sources += isec_abstract.md
 

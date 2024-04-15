@@ -4,12 +4,13 @@
 
 file=$1
 regex=$2
+outfile1=$3
+outfile2=$4
 
 # Use awk to find the line number that matches the regex
 line=$(awk "/$regex/{ print NR; exit }" $file)
+echo "splitting at line $line"
 
 # Use sed to split the file into two parts
-sed -n "$((line)),$ p" $file |
-   sed -e 's/\[\\citeproctext\]//' | \
-   grep -iv CSL > bibfile.tex
-sed -n "1,$((line-1))p" $file > body.tex
+sed -n "$((line)),$ p" $file >$outfile2
+sed -n "1,$((line-1))p" $file >$outfile1
