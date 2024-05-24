@@ -1,3 +1,8 @@
+---
+title: reviewer comme
+
+## reviewer
+
 There’s a lot to like about this paper. Who doesn’t enjoy a polemic? Who doesn’t want a simple answer to a complicated problem. Ultimately, however, I don’t think this paper works as a standalone paper. Either, it could serve as the basis of a read paper with rejoinders and further discussion. Or it could be expanded under the more honest title: “There is no best way to understand multifactorial systems”.
 
  
