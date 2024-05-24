@@ -44,7 +44,7 @@ When prediction is the primary goal, penalized methods can work better (faster a
 
 ## Acknowledgements
 
-Thanks to Jonathan Dushoff for conversations on these topics over many years. Dana Karelus, Daniel Turek, and Jeff Walker provided useful input: Noam Ross encouraged me to finally submit the paper; Tara Bolker gave advice on straw men; three anonymous reviewers gave useful feedback. This work was supported by multiple NSERC Discovery grants.
+Thanks to Jonathan Dushoff for conversations on these topics over many years. Dana Karelus, Daniel Turek, and Jeff Walker provided useful input: Noam Ross encouraged me to finally submit the paper; Tara Bolker gave advice on straw men; three anonymous reviewers gave useful feedback. This work was supported by multiple NSERC Discovery grants. I used Microsoft Copilot to remind me of the term "epistemic uncertainty".
 
 # References
 
