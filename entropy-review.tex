@@ -1,0 +1,449 @@
+% Options for packages loaded elsewhere
+\PassOptionsToPackage{unicode}{hyperref}
+\PassOptionsToPackage{hyphens}{url}
+%
+\documentclass[12pt]{article}
+\usepackage{times}
+\usepackage{amsmath,amssymb}
+\usepackage{url}
+\usepackage{iftex}
+\ifPDFTeX
+  \usepackage[T1]{fontenc}
+  \usepackage[utf8]{inputenc}
+  \usepackage{textcomp} % provide euro and other symbols
+\else % if luatex or xetex
+  \usepackage{unicode-math} % this also loads fontspec
+  \defaultfontfeatures{Scale=MatchLowercase}
+  \defaultfontfeatures[\rmfamily]{Ligatures=TeX,Scale=1}
+\fi
+\usepackage{lmodern}
+\ifPDFTeX\else
+  % xetex/luatex font selection
+\fi
+% Use upquote if available, for straight quotes in verbatim environments
+\IfFileExists{upquote.sty}{\usepackage{upquote}}{}
+\IfFileExists{microtype.sty}{% use microtype if available
+  \usepackage[]{microtype}
+  \UseMicrotypeSet[protrusion]{basicmath} % disable protrusion for tt fonts
+}{}
+\makeatletter
+\@ifundefined{KOMAClassName}{% if non-KOMA class
+  \IfFileExists{parskip.sty}{%
+    \usepackage{parskip}
+  }{% else
+    \setlength{\parindent}{0pt}
+    \setlength{\parskip}{6pt plus 2pt minus 1pt}}
+}{% if KOMA class
+  \KOMAoptions{parskip=half}}
+\makeatother
+\usepackage{xcolor}
+\setlength{\emergencystretch}{3em} % prevent overfull lines
+\providecommand{\tightlist}{%
+  \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
+\setcounter{secnumdepth}{-\maxdimen} % remove section numbering
+\ifLuaTeX
+  \usepackage{selnolig}  % disable illegal ligatures
+\fi
+\usepackage{bookmark}
+\IfFileExists{xurl.sty}{\usepackage{xurl}}{} % add URL line breaks if available
+\urlstyle{same}
+\hypersetup{
+  pdftitle={response to reviewer comments},
+  hidelinks,
+  pdfcreator={LaTeX via pandoc}}
+
+\title{response to reviewer comments}
+\author{}
+\date{}
+
+\begin{document}
+\maketitle
+
+\subsection{reviewer 1}\label{reviewer-1}
+
+There's a lot to like about this paper. Who doesn't enjoy a polemic? Who
+doesn't want a simple answer to a complicated problem. Ultimately,
+however, I don't think this paper works as a standalone paper. Either,
+it could serve as the basis of a read paper with rejoinders and further
+discussion. Or it could be expanded under the more honest title: ``There
+is no best way to understand multifactorial systems''.
+
+Doing statistics is hard. Learning from data is hard. To deny this is to
+show that one has never had to analyse real observational data and that
+one thinks generations of statisticians have been severely misguided as
+to what they should be doing.
+
+\emph{I don't think I ever denied this, explicitly or implicitly
+(although I admit I may have been overstating things a bit for
+rhetorical effect)}
+
+The view that the best approach is ``to use full (maximal) statistical
+models'' is, as the author is no doubt fully aware, completely
+misleading. It fails spectacularly in two very common scenarios: (1)
+when there are correlated explanatory variables, and (2) when the effect
+on the outcome of interest is nonlinear. To take the author's own
+example: precipitation and temperature are correlated variables whose
+effect is often nonlinear. When they are correlated, the full model can
+easily be too complicated and inferred effects can have the wrong sign
+and/or inflated CIs; when their effect is nonlinear, the full model is
+too simple.
+
+\emph{I either don't understand the reviewer's point completely, or I
+disagree. Since an additional reviewer also raised the point of
+collinearity, I added a new paragraph that goes into more detail (and
+provides multiple citations) and argues that using the full model with
+collinear variables does not ``fail spectacularly''; rather, it gives an
+accurate assessment of the degree of uncertainty about the strengths of
+the correlated effects. I don't understand what issue with nonlinearity
+is. My suggestion to use the ``full model'' does not mean we are
+restricted to linear terms.}
+
+And this raises another issue with the paper: the class of models the
+author seems to be contemplating is rather limited. Why not use
+generalised additive models? Random forests? There is a whole raft of
+approaches to prevent overfitting, to determine the relative importance
+of explanatory variables, etc that has real relevance to the question of
+how to understand multifactorial systems.
+
+\emph{I never intended the class of models to be restricted. I added two
+points to address this: (1) state in the first paragraph that the
+emphasis is on inference and quantification rather than prediction; (2)
+add references to additive models and Gaussian processes under the
+section on penalization.}
+
+Finally, there is no discussion (or criticism) in the paper of the
+Gelman \& Hill approach to model building. I think this has particular
+relevance to the ecological applications that the author has in mind.
+
+\emph{While I am familiar with Gelman and Hill's book in general, I
+don't know exactly what the ``Gelman \& Hill'' approach is. I've added a
+reference to Gelman and Shalizi discussing the idea of continuous model
+expansion.}
+
+Minor comments:
+
+\begin{itemize}
+\tightlist
+\item
+  An actual working example of the author's claims would have aided this
+  paper enormously.
+\end{itemize}
+
+\emph{Didn't have time to address this in the amount of time allowed for
+the revision (10 days).}
+
+\begin{itemize}
+\tightlist
+\item
+  Line 34: Please can we stop advocating that computing R\^{}2 is a
+  measure of whether our model ``describes the data reasonably well''.
+  Perhaps more important here is to stress the importance of the
+  checking of \emph{model assumptions}.
+\end{itemize}
+
+\emph{this line changed to ``e.g.~by examining model diagnostics and by
+making sure that the level of unexplained variation is not unacceptably
+large''}
+
+\begin{itemize}
+\tightlist
+\item
+  Line 103: I am not sure what is meant by ``unnecessarily discretizing
+  a continuous world'' in this context. Is the author suggesting model
+  space is continuous? But isn't that what MMA is trying to recover? Or
+  is the author saying that it is a category error to imagine the
+  components of a multifactorial system have independent effects? But in
+  that case a multifactorial model can only ever be a reflection of the
+  imaginative power of the researcher. Who is to say what the ``full
+  statistical model'' is?
+\end{itemize}
+
+\emph{I have changed this to ``a continuous model space''. MMA is indeed
+trying to recover a continuous model space, but my whole point is that
+doing it by averaging discrete models is a detour.}
+
+Miscellaneous:
+
+\begin{itemize}
+\tightlist
+\item
+  Line 193: The author needs to state when this Google Scholar search
+  was performed.
+\end{itemize}
+
+\emph{Results updated and dated}
+
+\pagebreak
+
+\subsection{reviewer 2}\label{reviewer-2}
+
+An interesting paper with some useful insights. I share a few thoughts
+and critiques below. Lines 11-12: Perhaps some rewording required here
+-- (1) aren't all models artiﬁcial? Are you trying to say models of
+little interest?
+
+\emph{Replaced with ``artificially simplified''}
+
+Lines 13-16: Isn't all shrinkage going to be dependent on sample size
+relative to number of parameters in the model? Larger sample sizes
+relative to number of parameters resulting in less shrinkage.
+
+\emph{Yes, but I don't see why this is particularly relevant to the
+abstract? added ``relative to the amount of data''}
+
+Lines 31-44: It seems as if you are equating multiple processes with
+multiple variables in a model. Do your arguments still apply in a
+situation where multiple variables are used to characterize one
+encompassing process? Or at least where there is not a one-one mapping
+of processes and variables?
+
+\emph{Yes, they do. I'm having trouble finding/understanding which
+passage this refers to, or why the reviewer would draw this conclusion
+\ldots{}}
+
+Line 66: Insert word ``it'', ``unequivocally that it has''.
+
+\emph{Done.}
+
+Lines 72-77: One issue with only ﬁtting the full model with all factors
+simultaneously even with very large sample sizes, is that the magnitude
+of the parameter estimates for each factor (variable) will reﬂect the
+multicollinearity among all the factors (variables) which alters their
+interpretation compared to a model with no collinearity among the
+factors (variables). See Cade (2015). There almost always is substantial
+multicollinearity among factors (predictor variables) in ecological
+models. One approach to help understand this better might be to not only
+consider the full model with all factors that has parameter estimates
+that reﬂect multicollinearity among factors (predictor variables), but
+to consider single factor (predictor) models where there is no
+collinearity possible. This could be used as a device to help understand
+how much rates of change associated with factor parameters have been
+altered by multicollinearity with other factors in the full model. It is
+easy to forget that regression coeﬃcients estimated in a multiple
+regression model only provide an interpretation for the part of a factor
+(predictor variable) that is not linearly related to the other factors
+(predictor variables) as Cade (2015) points out. If we really want to
+know about changes in outcomes associated with the linearly correlated
+parts of multiple factors, then it seems like something else must be
+done. It seems to me that the crucial exploration of models with
+multiple factors that have some degree of collinearity (like
+precipitation and temperature in the example on lines 104-105), is to
+understand changes in outcomes with changes in factors that occur
+simultaneously. This will usually require more than just simple
+interpretation of individual parameter estimates in a multifactorial
+model when there is some degree of multicollinearity among the factors.
+
+\emph{I've added a whole paragraph about collinearity to address this
+issue.}
+
+Line 88: Seems like Cade (2015) critique about MMA of coeﬃcients is
+principally about issues associated with collinear predictor variables.
+The critique of Walker (2017) relies on fraught causal interpretations
+of regression models that is inconsistent with conventional statistical
+theory associated with regression models. I would eliminate this
+citation.
+
+\emph{Done.}
+
+Lines 89-90: Seems like this needs to be reorganized a bit. The issue
+with variable collinearity (multicollinearity) is directly related to
+issues with model averaging estimates of predictor parameters
+(regression coeﬃcients).
+
+\emph{See reorganization/extended discussion of collinearity}
+
+Lines 90-91: Again, Cade (2015) critique also applies to problems with
+summing model weights to assess relative importance of predictors.
+
+\emph{Added.}
+
+Line 109: We could ﬁt all ﬁve of these models and NOT average their
+parameters.
+
+\emph{I'm not sure what the proposal is here. How exactly would we
+compare?}
+
+Line 149-150: There are several built in approaches to obtaining
+shrinkage estimates for quantile regression. The lasso is an option in
+Roger Koenker's quantreg package and other shrinkage type estimators are
+available in Fasiolo's qgam package.
+
+\emph{Added a reference to Koenker's review paper which mentions
+penalization}
+
+Lines 155-161: I think I recall reading somewhere that with lasso
+shrinkage estimates that it may be appropriate to reestimate a model
+that excludes all the parameters that were shrunk to zero to obtain
+better standard errors. I would guess this might have something to do
+with correctly reﬂecting the multicollinearity among predictors. Can you
+oﬀer any comments or insights on this model reestimation approach after
+shrinkage?
+
+{\em This approach was originally proposed by Efron et al.~(2004) as a
+``LARS-OLS hybrid'' and generalized by Meinshausen 2007 as the ``relaxed
+lasso''. I don't think this helps with collinearity issues (the elastic
+net does, though). While interesting, I think this is out of scope for
+this paper.
+
+Efron, Bradley, Trevor Hastie, Iain Johnstone, and Robert Tibshirani.
+2004. ``Least Angle Regression.''
+\url{https://projecteuclid.org/journals/annals-of-statistics/volume-32/issue-2/Least-angle-regression/10.1214/009053604000000067.short}.
+
+Meinshausen, Nicolai. 2007. ``Relaxed Lasso.'' Computational Statistics
+\& Data Analysis 52 (1): 374--93.
+\url{https://doi.org/10.1016/j.csda.2006.12.019}.
+}
+
+Line 199: Disagree. Some things we can imagine have no inﬂuence on the
+outcomes we observe. They may sometimes be weakly correlated with other
+relevant processes.
+
+\emph{I have softened this statement: ``In psychology, economics,
+sociology, epidemiology, ecology, and evolution, most processes that we
+would think of including in a model have \emph{some} influence on the
+outcomes that we observe. Pretending that some of these processes are
+completely absent can be a useful means to an inferential or
+computational end, but it is rarely what we actually believe about the
+system (although see @mundryIssues2011 for a counterargument)''}
+
+\pagebreak
+
+\subsection{reviewer 3}\label{reviewer-3}
+
+The manuscript discusses the limitations of multi-model approaches in
+dealing with multifactorial systems. The author presents several
+interesting observations that merit publication. Particularly noteworthy
+is the discussion regarding the potential pitfalls of model averaging.
+However, I believe the paper could beneﬁt from improved precision in
+certain statements and increased accessibility for non-ecologists.
+
+\begin{itemize}
+\tightlist
+\item
+  The paragraph starting at line 43: Some of the philosophical
+  statements in this paragraph may be subject to scrutiny. Speciﬁcally,
+  it appears as though the author is asserting that only the ``full
+  model'' is reasonable to consider. The notion of a full model is also
+  referenced later in line 135, where the author seems to assume that
+  analysts typically have a full model that closely approximates truth.
+  I am uncertain of the author's intended meaning, but it seems these
+  statements require clariﬁcation. It may be beneﬁcial to express these
+  ideas with greater precision, or if not possible, to soften them. It
+  is my understanding that constructing a complete model for complex
+  multifactorial phenomena is often unattainable. We operate under the
+  assumption that some factors may explain observations, yet inevitably
+  overlook others. Thus, all models can be regarded as subsets of others
+  that may better explain the data, unrecognized to the analyst.
+  Consequently, it may be prudent to explore models that encompass only
+  a subset of factors present in the largest model conceivable by the
+  analyst.
+\end{itemize}
+
+\emph{I've expanded this paragraph to try to clarify that while the
+AIC-optimal model is the closest predictive model to the truth, we don't
+usually believe that processes are dropped from the model because they
+don't exist, but rather because they can't be estimated reliably (so
+don't add to predictive accuracy).}
+
+Firstly, parsimony is crucial to mitigate overﬁtting -- this is somehow
+mentioned by the author. Secondly, selecting appropriate models is
+largely empirical, and I am reluctant to dissuade scientists from
+considering simpler models if they adequately explain observations
+compared to more complex alternatives.
+
+\emph{Points taken, but this should generally be done a priori - if it's
+done in a data-driven way it makes it hard to construct reliable
+confidence intervals}
+
+\begin{itemize}
+\tightlist
+\item
+  Does the paper address the possibility of correlations between
+  diﬀerent factors in certain applications? This consideration seems
+  signiﬁcant and warrants discussion.
+\end{itemize}
+
+\emph{I've added a paragraph about collinearity}
+
+\begin{itemize}
+\tightlist
+\item
+  Line 78: Stepwise regression is described as deprecated, although I
+  guess it may still be widely utilized in certain contexts---perhaps
+  not so much within ecology?
+\end{itemize}
+
+\emph{It is certainly still used in some fields of \textbf{predictive}
+modeling, although I would personally argue that it is dominated (where
+computational constraints allow) by forms of penalized regression that
+allow simultaneous modeling of the whole data set. I added references to
+more critiques.}
+
+While I acknowledge that data constraints can severely impact the eﬃcacy
+of stepwise regression, many criticisms of this method presuppose
+knowledge of the correct model.
+
+\emph{Yes, because without an analysis based on a knowledge of a
+generating model, it is hard to evaluate whether one is getting
+inferences correct}
+
+However, this is rarely the case when proposing models to explain a
+dataset. Consequently, what purpose is served by employing a more
+complex model if the available data can be explained by a simpler one?
+The simpler model may exhibit bias compared to a superior model ﬁtted to
+a larger dataset. Nonetheless, such a comparison is only feasible when a
+larger dataset and a more appropriate model are available.
+
+\emph{The argument is not that we know the true model, but that the
+simplfied models are pretending that some processes are exactly zero.
+This is a conceptual issue we should be aware of, even if a reduced
+model is ``good enough'' (and likely provides better predictive
+accuracy).}
+
+\begin{itemize}
+\tightlist
+\item
+  In relation to the previous point, does the author consider stepwise
+  regression based on combinations of multiple factor subsets or only
+  one factor at a time? For instance, Hastie et al.'s ``The Elements of
+  Statistical Learning'' advocate for exploring multiple subsets.
+\end{itemize}
+
+\emph{This may be a useful approach to predictive modeling, but I don't
+see it as being useful for constructing an inferential model. In the
+paragraph on correlation I added a description of simultaneously
+dropping several factors to evaluate their joint importance.}
+
+\begin{itemize}
+\tightlist
+\item
+  Incidentally, adding a citation to Hastie et al.'s book may be
+  appropriate regarding penalized approaches.
+\end{itemize}
+
+\emph{Done}
+
+\begin{itemize}
+\tightlist
+\item
+  I am concerned that the paper's key messages may not be fully
+  appreciated by many readers. While there is a discernible emphasis on
+  ecology, readers outside this domain may struggle to extract relevant
+  information. Accordingly, I propose several modiﬁcations and
+  additions: o Introducing the example from the paragraph starting at
+  line 103 earlier in the paper and utilizing it throughout to elucidate
+  various concepts.
+\end{itemize}
+
+\emph{Good idea, done}
+
+\begin{itemize}
+\item Providing a straightforward illustration of multi-model averaging
+would help.
+\item A diagram or table summarizing the discussed methods and
+their respective strengths and weaknesses could prove beneﬁcial.
+\end{itemize}
+
+\emph{These are good ideas, but I haven't done them; there are many examples of multi-model averages in the references (e.g. in Burnham and Anderson's books)}
+
+\end{document}

@@ -1,0 +1,3 @@
+latexdiff entropy_ms_ex_old.tex entropy_ms_ex.tex  > diff.tex
+texi2dvi -p diff.tex
+

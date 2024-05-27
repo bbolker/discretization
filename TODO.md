@@ -1,3 +1,9 @@
+## response
+
+* collate response to reviewers
+* more on entropy/information (Taper)?
+* review the whole thing
+
 ## pub
 
 * tweak workflow (split out acknowledgements; )
